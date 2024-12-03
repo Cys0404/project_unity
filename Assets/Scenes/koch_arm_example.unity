@@ -1300,7 +1300,7 @@ MonoBehaviour:
   targetEndEffector: {fileID: 1216095629}
   targetPitch: {fileID: 727019894}
   targetRoll: {fileID: 1398234927}
-  Control_source: {fileID: 67901461}
+  Control_source: {fileID: 1639865415}
   user_arm_length: 75
 --- !u!1 &697795061
 GameObject:
@@ -3941,6 +3941,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: ab830ee615e232f4d88cb7a94b97c6cc, type: 2}
+--- !u!1 &1639865415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 491124901914486170, guid: 3f7511fbc40ae7a4b89c3298a3de199d, type: 3}
+  m_PrefabInstance: {fileID: 345493933}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1707316796
 GameObject:
   m_ObjectHideFlags: 0
@@ -4795,7 +4800,7 @@ MonoBehaviour:
   m_Camera: {fileID: 1470797644}
   m_OriginBaseGameObject: {fileID: 1949000942}
   m_CameraFloorOffsetObject: {fileID: 1939565896}
-  m_RequestedTrackingOriginMode: 0
+  m_RequestedTrackingOriginMode: 2
   m_CameraYOffset: 1.1176
 --- !u!4 &1949000944
 Transform:
@@ -5021,7 +5026,7 @@ Transform:
   m_GameObject: {fileID: 2019981265}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2, y: 1, z: 0}
+  m_LocalPosition: {x: -0.5, y: 1, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5051,7 +5056,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2019981265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 

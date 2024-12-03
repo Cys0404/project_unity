@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class VR_mapping_koch : MonoBehaviour
 
         zVRr = vr_controller.eulerAngles.z;
         xVRr = vr_controller.eulerAngles.x;
+        
 
         targetEndEffector.transform.position = vr_controller.position * 42 / user_arm_length;
         targetEndEffector.transform.rotation = vr_controller.rotation;
@@ -34,4 +36,5 @@ public class VR_mapping_koch : MonoBehaviour
         // targetPitch.transform.eulerAngles = new Vector3(xVRr, transform.eulerAngles.y, transform.eulerAngles.z);
         // targetRoll.transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, zVRr-90);
     }
+
 }
