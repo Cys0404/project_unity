@@ -1,5 +1,5 @@
 #package example
-/[Aa]ssets/Samples/
+# /[Aa]ssets/Samples/
 
 .vsconfig
 .vscode/
