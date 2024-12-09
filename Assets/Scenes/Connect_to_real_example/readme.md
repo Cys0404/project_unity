@@ -1,37 +1,83 @@
-# Example scene of connect to real arm
-Here are 4 different example scenes for learning how to connect to the real arm, to get the real arm status, to control the arm.  
-1. The connection technique is base on ROS# to connect the ROS2 Rosbridge server. Please check your ROS# version is later than 2.0.0 for supporting ROS2 communication.
-2. check [koch_ros2_wrapper](https://github.com/hrc-pme/koch_ros2_wrapper) for real reobot setup and run the real robot.
-## Important components
-Here are some important components in these example project - XXX_connector_OOO.
-It is the connector gameobject (An empty gameobject + ros connector scripts), check some important pararmeter.
-* Ros Connector
-- Ros Bridge Server Url: the IP and port to connect to robot. (format: ws://{IP}:{port} e.g. ws://192.168.0.244:9090)
-- ROS Version: connect to what ros version (e.g. ROS1, ROS2) 
-* Publisher / Subscriber
-- Topic: the topic will subscribe or publish to
-Important: Carefully check the name or ip you type in, any indent or space will make the system takes it as a different name. 
 
-## Example 1: Control_from_leader_example
-In this example, the arm in unity like a simulator, the user need to run the real leader arm and use the leader arm to control the follower in the unity.
-* For real arm, check [single_leader_control](https://github.com/hrc-pme/koch_ros2_wrapper#setup-1-single-leader) to run single leader control.
-* For unity, check the IP, topic name setup is correct.
+# Example Scenes: Connecting to the Real Arm  
 
-## Example 2: Status_from_follower_example
-In this example, the unity get the joint_states data from the real follower arm, like a virtual represent arm in unity.
-* For real arm, check [leader_follower_control](https://github.com/hrc-pme/koch_ros2_wrapper#setup3-single-leader-follower) 
-* For unity, check the IP, topic name setup is correct.
+These scenes demonstrate how to:  
+- Connect to the real Koch arm  
+- Retrieve the arm’s status  
+- Control the arm  
 
-## Example 3: keyboard_control_example
-In this example, we will have two arm in unity: control arm and real arm
-the A/Z S/X D/C F/V G/B H/N on keyboard can control joint1 ~ 6, and "Space" will send the joint_state data to real arm to control the arm. You can press one time to do goal point control, or keep pressing for dragging control.
-* For real arm, check [single_follower_control](https://github.com/hrc-pme/koch_ros2_wrapper#setup2-single-follower)
-* For unity, check the IP and topic name setting is correct. 
-## Example 4: leader_follower_example
-In this example, the arm in unity get the leader arm joint_state and send to the follower arm. (compare to the single_leader_follower control, this method can seperate leader and follower arm to two different machine.)
-Control flow chart:
-single_leader_follower: leader -> follower (need on same computer)
-leader_follower_example: leader -> unity -> follower (leader follower can seperate to two different machine or still on the same.)
-* For real arm, check [leader_follower_control](https://github.com/hrc-pme/koch_ros2_wrapper#setup3-single-leader-follower) 
-* For unity, check the IP, topic name setup is correct.
- 
+---
+
+## Prerequisites  
+
+1. **ROS# Requirement:** Ensure your ROS# version is **2.0.0 or later** for ROS2 communication.  
+2. **Real Robot Setup:** Follow the instructions in **[koch_ros2_wrapper](https://github.com/hrc-pme/koch_ros2_wrapper)** for real robot configuration.  
+
+---
+
+## Important Components  
+
+**Key GameObject:** `XXX_connector_OOO` (an empty GameObject with ROS connector scripts).  
+
+### Important Parameters  
+
+- **Ros Connector:**  
+  - **Ros Bridge Server URL:** Format `ws://{IP}:{port}` (e.g., `ws://192.168.0.244:9090`)  
+  - **ROS Version:** Specify the ROS version (`ROS1` or `ROS2`).  
+
+- **Publisher/Subscriber:**  
+  - **Topic:** Specify the correct topic names for publishing or subscribing.  
+
+⚠️ **Important:** Double-check IPs and topic names. Typos, extra spaces, or incorrect indentation may cause connection issues.  
+
+---
+
+## Example Scenes  
+
+### **Example 1: Control from Leader Example**  
+
+- **Scenario:** The Unity arm acts as a simulator controlled by the real leader arm.  
+
+**Setup:**  
+- Real Arm: Follow the **[single_leader_control guide](https://github.com/hrc-pme/koch_ros2_wrapper#setup-1-single-leader)**.  
+- Unity: Verify IP and topic name settings.  
+
+---
+
+### **Example 2: Status from Follower Example**  
+
+- **Scenario:** Unity retrieves joint state data from the real follower arm, providing a virtual representation.  
+
+**Setup:**  
+- Real Arm: Follow the **[leader_follower_control guide](https://github.com/hrc-pme/koch_ros2_wrapper#setup3-single-leader-follower)**.  
+- Unity: Ensure IP and topic names are correct.  
+
+---
+
+### **Example 3: Keyboard Control Example**  
+
+- **Scenario:** Control the arm using the keyboard. Use keys `A-Z, S-X, D-C, F-V, G-B, H-N` for joints 1-6. Press `Space` to send joint state data to the real arm.  
+
+**Modes:**  
+- **Goal Point Control:** Press once.  
+- **Dragging Control:** Hold the keys.  
+
+**Setup:**  
+- Real Arm: Follow the **[single_follower_control guide](https://github.com/hrc-pme/koch_ros2_wrapper#setup2-single-follower)**.  
+- Unity: Double-check IP and topic names.  
+
+---
+
+### **Example 4: Leader-Follower Example**  
+
+- **Scenario:** Unity forwards joint states from the leader arm to the follower arm.  
+
+**Control Flow Comparison:**  
+- **Single Leader-Follower:** `Leader → Follower` (same machine).  
+- **Leader-Follower Example:** `Leader → Unity → Follower` (can use different machines).  
+
+**Setup:**  
+- Real Arm: Follow the **[leader_follower_control guide](https://github.com/hrc-pme/koch_ros2_wrapper#setup3-single-leader-follower)**.  
+- Unity: Verify IP and topic names.  
+
+---
