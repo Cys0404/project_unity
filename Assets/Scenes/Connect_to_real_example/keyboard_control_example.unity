@@ -358,7 +358,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114665103}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7068252, z: 0, w: 0.7073882}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0, y: -0.044999927, z: 0.001353}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -367,7 +367,7 @@ Transform:
   - {fileID: 149845986}
   - {fileID: 922247414}
   m_Father: {fileID: 1113849712}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!54 &114665105
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -434,7 +434,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000000014915713, y: -0.04499989, z: 0.001353}
+  m_ConnectedAnchor: {x: -0.000000003725291, y: -0.045000028, z: 0.001353}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -1034,7 +1034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 275465951}
   - component: {fileID: 275465953}
-  - component: {fileID: 275465952}
+  - component: {fileID: 275465954}
   m_Layer: 0
   m_Name: koch_arm_connector_follower
   m_TagString: Untagged
@@ -1057,27 +1057,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 26977663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &275465952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275465950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aae1d8da5a3c0644bb98a540ca597dfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Topic: /left_follower/joint_states_control
-  JointStateReaders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 670802855}
-  - {fileID: 1844204884}
-  - {fileID: 822132324}
-  - {fileID: 765690630}
-  FrameId: Unity
 --- !u!114 &275465953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,6 +1074,35 @@ MonoBehaviour:
   Serializer: 0
   protocol: 0
   RosBridgeServerUrl: ws://192.168.0.150:9090
+--- !u!114 &275465954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275465950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fe4cf3b1dd3507418f7ec019f9193ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: /left_follower/joint_states
+  TimeStep: 0
+  EnsureThreadSafety: 0
+  JointNames:
+  - left_follower_shoulder_pan
+  - left_follower_shoulder_lift
+  - left_follower_elbow_flex
+  - left_follower_wrist_flex
+  - left_follower_wrist_roll
+  - left_follower_gripper
+  JointStateWriters:
+  - {fileID: 574038334}
+  - {fileID: 376547281}
+  - {fileID: 670802855}
+  - {fileID: 1844204884}
+  - {fileID: 822132324}
+  - {fileID: 765690639}
 --- !u!1001 &285676998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1623,7 +1631,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 447697692}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7068252, w: 0.7073882}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.014791006, y: 0.108347, z: 0.00025}
   m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1632,7 +1640,7 @@ Transform:
   - {fileID: 854796443}
   - {fileID: 1113849712}
   m_Father: {fileID: 845616340}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!54 &447697694
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1699,7 +1707,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.014791006, y: 0.108347, z: 0.00025}
+  m_ConnectedAnchor: {x: -0.014791014, y: 0.10834703, z: 0.00025}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -2927,7 +2935,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 670802846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3122a7138a008c14f83e8b3df6286693, type: 3}
+  m_Script: {fileID: 11500000, guid: aec95d463d3b5794e8e0107fc6647fcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &688201536
@@ -3282,7 +3290,7 @@ GameObject:
   - component: {fileID: 765690633}
   - component: {fileID: 765690632}
   - component: {fileID: 765690631}
-  - component: {fileID: 765690630}
+  - component: {fileID: 765690639}
   m_Layer: 0
   m_Name: gripper_moving_1
   m_TagString: Untagged
@@ -3290,18 +3298,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &765690630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765690629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3122a7138a008c14f83e8b3df6286693, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &765690631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3464,6 +3460,18 @@ Transform:
   - {fileID: 1168164279}
   m_Father: {fileID: 822132323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &765690639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765690629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec95d463d3b5794e8e0107fc6647fcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &771649084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3973,7 +3981,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 822132315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3122a7138a008c14f83e8b3df6286693, type: 3}
+  m_Script: {fileID: 11500000, guid: aec95d463d3b5794e8e0107fc6647fcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &825106200
@@ -4144,7 +4152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845616339}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7068252, w: 0.7073882}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.017299999, z: -0.0002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4153,7 +4161,7 @@ Transform:
   - {fileID: 821863364}
   - {fileID: 447697693}
   m_Father: {fileID: 1411698037}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!54 &845616341
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4622,7 +4630,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 922247413}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000021081815, y: 0, z: 0.000000021065036, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.00025000086, y: -0.0131499525, z: -0.0074000247}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4670,7 +4678,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00025000135, y: -0.013149917, z: -0.0074000247}
+  m_ConnectedAnchor: {x: 0.000250001, y: -0.013150051, z: -0.007400022}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -4873,7 +4881,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 923144587}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aae1d8da5a3c0644bb98a540ca597dfb, type: 3}
   m_Name: 
@@ -5190,6 +5198,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1061851519}
   - component: {fileID: 1061851518}
+  - component: {fileID: 1061851520}
   m_Layer: 0
   m_Name: koch_v1.1_control
   m_TagString: Untagged
@@ -5228,6 +5237,50 @@ Transform:
   - {fileID: 923144588}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1061851520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061851517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba2f8c551a5c4443b910f32385cfdab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  robotJoints:
+  - jointObject: {fileID: 1411698036}
+    rotationAxis: {x: 0, y: 1, z: 0}
+    rotationStep: 0.5
+    minRotation: -160
+    maxRotation: 160
+  - jointObject: {fileID: 845616339}
+    rotationAxis: {x: 0, y: 0, z: 1}
+    rotationStep: 0.5
+    minRotation: -20
+    maxRotation: 100
+  - jointObject: {fileID: 447697692}
+    rotationAxis: {x: 0, y: 0, z: 1}
+    rotationStep: 0.5
+    minRotation: -175
+    maxRotation: 85
+  - jointObject: {fileID: 1113849703}
+    rotationAxis: {x: 0, y: 0, z: 1}
+    rotationStep: 0.5
+    minRotation: -180
+    maxRotation: 0
+  - jointObject: {fileID: 114665103}
+    rotationAxis: {x: 0, y: 1, z: 0}
+    rotationStep: 0.5
+    minRotation: -180
+    maxRotation: 180
+  - jointObject: {fileID: 922247413}
+    rotationAxis: {x: 1, y: 0, z: 0}
+    rotationStep: 0.5
+    minRotation: 0
+    maxRotation: 90
+  jointState_Pub: {fileID: 923144589}
 --- !u!1 &1083379536
 GameObject:
   m_ObjectHideFlags: 0
@@ -5382,7 +5435,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.09046694, y: 0.0027470363, z: 0.00012499999}
+  m_ConnectedAnchor: {x: -0.090467036, y: 0.002747014, z: 0.00012499999}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -5496,7 +5549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113849703}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7068252, w: 0.7073882}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.09046697, y: 0.0027470214, z: 0.00012499999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5505,7 +5558,7 @@ Transform:
   - {fileID: 825106201}
   - {fileID: 114665104}
   m_Father: {fileID: 447697693}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &1113849713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7583,7 +7636,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1844204875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3122a7138a008c14f83e8b3df6286693, type: 3}
+  m_Script: {fileID: 11500000, guid: aec95d463d3b5794e8e0107fc6647fcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1852017110
