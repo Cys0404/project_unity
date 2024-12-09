@@ -282,12 +282,12 @@ MonoBehaviour:
   TimeStep: 0
   EnsureThreadSafety: 0
   JointNames:
-  - left_leader_shoulder_pan
-  - left_leader_shoulder_lift
-  - left_leader_elbow_flex
-  - left_leader_wrist_flex
-  - left_leader_wrist_roll
-  - left_leader_gripper
+  - left_follower_shoulder_pan
+  - left_follower_shoulder_lift
+  - left_follower_elbow_flex
+  - left_follower_wrist_flex
+  - left_follower_wrist_roll
+  - left_follower_gripper
   JointStateWriters:
   - {fileID: 1411698039}
   - {fileID: 845616342}
