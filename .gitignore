@@ -86,3 +86,6 @@ Assets/3D_Models*
 #ignore log csv files
 2024*
 2025*
+
+# ignore unity store layout configuration
+UserSettings/Layouts/*.dwlt
