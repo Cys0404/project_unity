@@ -89,3 +89,9 @@ Assets/3D_Models*
 
 # ignore unity store layout configuration
 UserSettings/Layouts/*.dwlt
+
+#ignore upgrade log
+UpgradeLog.htm
+
+#ignore editor usersettings
+UserSettings/EditorUserSettings.asset
