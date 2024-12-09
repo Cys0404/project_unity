@@ -18,6 +18,6 @@ Refer to this repository for setup and running instructions for the real arm.
 ## Example Usage  
 
 Run the example scenes located in `Scenes > Connect_to_real_example`.  
-For detailed instructions, see the **[Example Scene README](https://github.com/hrc-pme/koch_robot_unity/blob/master/Assets/Scenes/Connect_to_real_example/readme.md)**.
+For detailed instructions, see the **[Example Scene README](https://github.com/hrc-pme/koch_robot_unity/blob/master/Assets/Scenes/Connect_to_real_example)**.
 
 ---
