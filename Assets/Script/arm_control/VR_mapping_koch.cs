@@ -21,7 +21,7 @@ public class VR_mapping_koch : MonoBehaviour
     void Update()
     {
         vr_controller = Control_source.transform;
-        //Debug.Log(vr_controller.position.x);
+        Debug.Log(vr_controller.position.x);
 
         zVRr = vr_controller.eulerAngles.z;
         xVRr = vr_controller.eulerAngles.x;
@@ -29,8 +29,8 @@ public class VR_mapping_koch : MonoBehaviour
         targetEndEffector.transform.rotation = vr_controller.rotation;
 
         targetEndEffector.transform.position = new Vector3(
-            vr_controller.position.x * 35 / user_arm_length,
-            vr_controller.position.y,
+            vr_controller.position.x ,
+            vr_controller.position.y ,
             vr_controller.position.z * 35 / user_arm_length
         );
 
