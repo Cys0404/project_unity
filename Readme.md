@@ -2,8 +2,21 @@
 # Koch Arm Unity
 
 This Unity project uses **ROS#** to control a real Koch arm.  
-**Unity version:** 2022.3.5f1  
+**Unity version:** 2022.3.51f1  
 
+## Setup
+1. Clone this repo on windows machine
+```
+git clone git@github.com:hrc-pme/koch_robot_unity.git
+```
+2. Check folder Assests/model is exist, and the robot model you are using is exist.
+if not, check [Google_drive](https://drive.google.com/drive/folders/1_n22OSgRQmWDHSPZfQvmv3m8MH8g9A4N?usp=sharing) for your project resources.
+
+3. check the dependency is correct
+    * Inverse IK -> FinalIK (Assets/plugin/RootMotion)
+    * Package manage -> Nuget (Assets/Nuget)
+    * Pointcloud -> OpenCvSharp4.4.10.0.20241108 (Assets/Packages)
+        ⚠️ warning OpenCvsharp4 will have two folder: OpenCvSharp4.4.10.0.20241108, OpenCvSharp4.runtime.win.4.10.0.20241108 please install with Nuget, or import the custom package at [Google_drive](https://drive.google.com/drive/folders/1_n22OSgRQmWDHSPZfQvmv3m8MH8g9A4N?usp=sharing). 
 ---
 
 ## Real Robot Repository  
