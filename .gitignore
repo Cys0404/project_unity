@@ -61,25 +61,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-#ignore the folder .meta file
-Assets/Material/Drone_icon_material.meta
-Assets/Material/Materials.meta
-Assets/Material/boat_state_material.meta
-Assets/Scripts/perception.meta
-Assets/Scripts/perception/bounding_box.
-Assets/Scripts/perception/dope.meta
-Assets/Scripts/unity-Controller.meta
-Assets/Scripts/unity-Drone.meta
-Assets/Scripts/unity-Wamv.meta
-Assets/Scripts/unity_in_app_function.meta
-Assets/Plugins.meta
-Assets/Samples.meta
-Assets/Scenes/Exp1_aerial_manipulations_visual.meta
-Assets/Scenes/Exp2_semi_auto_aerial_manipulation.meta
-Assets/Scripts/perception/bounding_box.meta
-Assets/Scripts/latency_compute.meta
-Assets/Scripts/PointCloudStreaming/Image.meta
-Assets/Scripts/latency_compute/Image.meta
 #ignore the 3D model folder
 Assets/3D_Models*
 
@@ -95,3 +76,5 @@ UpgradeLog.htm
 
 #ignore editor usersettings
 UserSettings/EditorUserSettings.asset
+
+Assets/Packages*
