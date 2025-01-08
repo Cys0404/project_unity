@@ -67,12 +67,13 @@ public class VR_mapping_koch : MonoBehaviour
             xVRr - 90
         );
 
-        // 更新 Target_Roll 的旋轉
-        targetRoll.transform.rotation = Quaternion.Euler(
-            targetRoll.transform.eulerAngles.x,
-            targetRoll.transform.eulerAngles.y,
-            zVRr - 90
-        );
+        // 我們想要繞「本地 X 軸」轉 rollAngle 度
+        float rollAngle = -zVRr + 90;  // 來自你的 VR 控制器 Z 軸 (或做其他計算/偏移)
+        Quaternion rollRotation = Quaternion.AngleAxis(rollAngle, Vector3.right);
+
+        // 直接設定給 localRotation (不再用 localEulerAngles)
+        targetRoll.transform.localRotation = rollRotation;
+
 
         // 調試輸出，確認 Target_Roll 的旋轉
         Debug.Log($"Target_Roll Rotation: {targetRoll.transform.rotation.eulerAngles}");

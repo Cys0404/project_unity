@@ -1246,8 +1246,8 @@ MonoBehaviour:
   axis: {x: 0, y: 0, z: 1}
   defaultLocalRotation: {x: 0, y: 0, z: 0, w: 1}
   useLimits: 1
-  min: -90
-  max: 90
+  min: -180
+  max: 180
   zeroAxisDisplayOffset: 0
 --- !u!1001 &283150369
 PrefabInstance:
@@ -3839,7 +3839,7 @@ MonoBehaviour:
   axis: {x: 0, y: 0, z: 1}
   defaultLocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   useLimits: 1
-  min: 0
+  min: -180
   max: 180
   zeroAxisDisplayOffset: 0
 --- !u!1001 &925028137
@@ -5576,9 +5576,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 796b75e345bd64d47a31edd757bd2670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0
+  m_Weight: 1
   m_Data:
-    m_Root: {fileID: 263424517}
+    m_Root: {fileID: 1988167845}
     m_Tip: {fileID: 1398362506}
     m_Target: {fileID: 1296015814}
     m_ChainRotationWeight: 1
@@ -8446,8 +8446,8 @@ MonoBehaviour:
   axis: {x: 0, y: 0, z: 1}
   defaultLocalRotation: {x: 0, y: 0, z: 0, w: 1}
   useLimits: 1
-  min: -110
-  max: 0
+  min: -180
+  max: 180
   zeroAxisDisplayOffset: 0
 --- !u!1 &1872353825
 GameObject:
