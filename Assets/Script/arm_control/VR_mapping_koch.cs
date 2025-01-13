@@ -48,7 +48,7 @@ public class VR_mapping_koch : MonoBehaviour
         zVRr = vrEuler.z;
 
         // 調試輸出，確認手腕的旋轉數據
-        Debug.Log($"R_Wrist Euler Angles: X={xVRr}, Y={yVRr}, Z={zVRr}");
+        //Debug.Log($"R_Wrist Euler Angles: X={xVRr}, Y={yVRr}, Z={zVRr}");
 
         // 更新 End Effector 的旋轉
         targetEndEffector.transform.rotation = vr_controller.rotation;
@@ -59,23 +59,47 @@ public class VR_mapping_koch : MonoBehaviour
             vr_controller.position.y,
             vr_controller.position.z * 35 / user_arm_length
         );
+        //對z軸單獨做mapping是因為手的長度是在z軸上，若是koch arm和手臂在同一水平線上，則將手打直只有z軸的長度會不一致。
+
+        //if (xVRr - 90 > 
+
+        // 計算旋轉角度
+        float pitchAngle = xVRr - 90;
+
+        //// 加入限制
+        //if (pitchAngle < 210 && pitchAngle > 190 )
+        //{
+        //    pitchAngle = 210; // 如果小於 210 度，且大於 190 度，則設置為 210 度
+        //}
+        //Debug.Log($"pitchAngle: {pitchAngle}");
+
+        // Note : 一律用Debug.Log檢查轉角輸出的值，直接看inspector不準確。
 
         // 更新 Target_Pitch 的旋轉
         targetPitch.transform.rotation = Quaternion.Euler(
             targetPitch.transform.eulerAngles.x,
             targetPitch.transform.eulerAngles.y,
-            xVRr - 90
+            pitchAngle
         );
 
-        // 我們想要繞「本地 X 軸」轉 rollAngle 度
-        float rollAngle = -zVRr + 90;  // 來自你的 VR 控制器 Z 軸 (或做其他計算/偏移)
+        // 繞「本地 X 軸」轉 rollAngle 度
+        float rollAngle = -zVRr + 90;  // 拿到R_Wrist的z軸的旋轉值後對offset做修正
+
+        //// 加入限制，因為pitch到超過一定的值後roll會一起旋轉。
+        //if (rollAngle < 70 && rollAngle > -90)
+        //{
+        //    rollAngle = 70;
+        //}
+
         Quaternion rollRotation = Quaternion.AngleAxis(rollAngle, Vector3.right);
 
-        // 直接設定給 localRotation (不再用 localEulerAngles)
+        // 直接設定給 localRotation (用localEulerAngles會遇到萬向鎖的問題，超麻煩)
         targetRoll.transform.localRotation = rollRotation;
 
 
         // 調試輸出，確認 Target_Roll 的旋轉
-        Debug.Log($"Target_Roll Rotation: {targetRoll.transform.rotation.eulerAngles}");
+        //Debug.Log($"Target_Roll Rotation: {targetRoll.transform.rotation.eulerAngles}");
+        Debug.Log($"rollAngle: {rollAngle}");
+
     }
 }
