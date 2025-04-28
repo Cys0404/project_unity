@@ -11,7 +11,7 @@ public class VR_mapping_koch : MonoBehaviour
     public GameObject targetRoll;
     public GameObject targetGripper;
     public GameObject Control_source; // VR controller or hand
-    public GameObject R_IndexProximal;
+    public GameObject IndexProximal;
     public float user_arm_length = 77; // Input user arm length to modify the mapping of human arm to robot arm 
 
     private float xVRr, yVRr, zVRr;
@@ -50,7 +50,7 @@ public class VR_mapping_koch : MonoBehaviour
         zVRr = vrEuler.z;
 
         // 獲取手指root的 Euler 角度
-        float xINDEXr = R_IndexProximal.transform.eulerAngles.x;
+        float xINDEXr = IndexProximal.transform.eulerAngles.x;
 
 
 
