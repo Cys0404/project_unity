@@ -9,7 +9,7 @@ public class VR_mapping_koch : MonoBehaviour
     private Transform vr_controller;
     public GameObject targetPitch;
     public GameObject targetRoll;
-    public GameObject targetGripper;
+    private GameObject targetGripper;
     public GameObject Control_source; // VR controller or hand
     public GameObject IndexProximal;
     public float user_arm_length = 77; // Input user arm length to modify the mapping of human arm to robot arm 
@@ -129,7 +129,7 @@ public class VR_mapping_koch : MonoBehaviour
 
         //_____________________以下為gripper的範圍___________________
 
-        float PitchAngle_targetGripper = xINDEXr -90;  // 拿到R_IndexProximal的x軸的旋轉值後對offset做修正
+        float PitchAngle_targetGripper = xINDEXr - 90;  // 拿到R_IndexProximal的x軸的旋轉值後對offset做修正
         Debug.Log($"PitchAngle_tagertGripper: {PitchAngle_targetGripper}");
 
         Quaternion PitchRotation = Quaternion.AngleAxis(PitchAngle_targetGripper, Vector3.right);
