@@ -15,13 +15,18 @@ public class RGBDRender : MonoBehaviour
     MeshRenderer meshRenderer;
     MeshFilter mf;
 
-    // The size, positions and colours of each of the pointcloud
-    // public float pointSize = 1f;
-    // public float radius = 0.1f;
+    [Header("Point Size Settings")]
+    [Tooltip("Global point size multiplier (like RViz, can be 0.001 ~ 10)")]
+    [Range(0.001f, 10f)]
+    public float globalPointSize = 1f;
+
+    [Tooltip("Minimum point size in pixels")]
+    [Range(0.1f, 5f)]
+    public float minPointSizePixels = 0.5f;
 
     [Header("MAKE SURE THESE LISTS ARE MINIMISED OR EDITOR WILL CRASH")]
-    private Vector3[] positions = new Vector3[] {new Vector3(0, 0, 0)};
-    private Color[] colours = new Color[] {new Color(1f, 1f, 1f)};
+    private Vector3[] positions = new Vector3[] { new Vector3(0, 0, 0) };
+    private Color[] colours = new Color[] { new Color(1f, 1f, 1f) };
     // private float[] dis = new float[] {0.0f}; 
     public Transform offset; // Put any gameobject that faciliatates adjusting the origin of the pointcloud in VR. 
 
@@ -32,16 +37,16 @@ public class RGBDRender : MonoBehaviour
         mesh = new Mesh();
         mf = gameObject.AddComponent<MeshFilter>();
         meshRenderer.material = new Material(Shader.Find("Custom/PointCloudGeometryShader"));
-            // Use 32 bit integer values for the mesh, allows for stupid amount of vertices (2,147,483,647 I think?)
+        // Use 32 bit integer values for the mesh, allows for stupid amount of vertices (2,147,483,647 I think?)
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         transform.position = offset.position;
         transform.rotation = offset.rotation;
-        
+
     }
 
     void UpdateMesh()
     {
-        
+
         mesh.Clear();
         //positions = subscriber.pcl;
         positions = subscriber.GetPCL(3);
@@ -62,7 +67,7 @@ public class RGBDRender : MonoBehaviour
             indices[i] = i; // Direct mapping
         }
         mesh.SetIndices(indices, MeshTopology.Points, 0); // Use MeshTopology.Points
-        
+
         mf.mesh = mesh;
     }
 
@@ -71,9 +76,14 @@ public class RGBDRender : MonoBehaviour
     {
         transform.position = offset.position;
         transform.rotation = offset.rotation;
-        //meshRenderer.material.SetFloat("_PointSize", pointSize);
 
-        // meshRenderer.material.SetFloat("_PointSize", pointSize);
+        // 更新 shader 的點大小參數
+        if (meshRenderer != null && meshRenderer.material != null)
+        {
+            meshRenderer.material.SetFloat("_PointScale", globalPointSize);
+            meshRenderer.material.SetFloat("_MinPointSize", minPointSizePixels);
+        }
+
         UpdateMesh();
         // Debug.Log(DateTime.Now.ToString("HH:mm:ss.ffffff"));
     }
