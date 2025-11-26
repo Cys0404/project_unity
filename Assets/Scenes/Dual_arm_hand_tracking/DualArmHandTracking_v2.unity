@@ -8204,7 +8204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 270d4dcc20caf7e469011015cef8247c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotBase: {fileID: 0}
   targetEndEffector: {fileID: 731563064}
   targetPitch: {fileID: 5233666}
   targetRoll: {fileID: 426408919}
@@ -8228,6 +8227,7 @@ MonoBehaviour:
   _debugActualEndEffectorPos: {x: 0, y: 0, z: 0}
   _debugHandEuler: {x: 0, y: 0, z: 0}
   _debugIsUpdating: 0
+  _isHandTrackingInitialized: 0
 --- !u!1 &177000235
 GameObject:
   m_ObjectHideFlags: 0
@@ -9366,12 +9366,13 @@ Transform:
   m_GameObject: {fileID: 196937423}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.45545548, y: 0.7576228, z: 0.26722783}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2107115366}
   - {fileID: 567940778}
+  - {fileID: 2107115366}
+  - {fileID: 367592477}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &197684745
@@ -16529,14 +16530,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367592476}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 524226076}
   - {fileID: 1670579927}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 196937424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &368082275
 GameObject:
@@ -28973,7 +28974,7 @@ Transform:
   m_GameObject: {fileID: 567940777}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.2554555, y: -1.0466228, z: -0.36722782}
+  m_LocalPosition: {x: -0.8, y: -0.289, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -35325,7 +35326,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.014791006, y: 0.108347, z: 0.0002499487}
+  m_ConnectedAnchor: {x: -0.014791014, y: 0.108346984, z: 0.00025018712}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -37361,7 +37362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 270d4dcc20caf7e469011015cef8247c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotBase: {fileID: 0}
   targetEndEffector: {fileID: 2014916639}
   targetPitch: {fileID: 2091549503}
   targetRoll: {fileID: 542099258}
@@ -37385,6 +37385,7 @@ MonoBehaviour:
   _debugActualEndEffectorPos: {x: 0, y: 0, z: 0}
   _debugHandEuler: {x: 0, y: 0, z: 0}
   _debugIsUpdating: 0
+  _isHandTrackingInitialized: 0
 --- !u!1 &713116112
 GameObject:
   m_ObjectHideFlags: 8
@@ -48967,7 +48968,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0.017299999, z: -0.00019997358}
+  m_ConnectedAnchor: {x: 1.4210855e-14, y: 0.017300043, z: -0.00019973516}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -51468,7 +51469,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00024924302, y: -0.013150275, z: -0.0074000526}
+  m_ConnectedAnchor: {x: 0.0002490046, y: -0.013150275, z: -0.0074000526}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -78632,7 +78633,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1544139637}
   - component: {fileID: 1544139641}
-  - component: {fileID: 1544139640}
   - component: {fileID: 1544139639}
   - component: {fileID: 1544139638}
   m_Layer: 0
@@ -78698,50 +78698,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1544139640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1544139636}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba2f8c551a5c4443b910f32385cfdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  robotJoints:
-  - jointObject: {fileID: 1470267971}
-    rotationAxis: {x: 0, y: 1, z: 0}
-    rotationStep: 0.5
-    minRotation: -160
-    maxRotation: 160
-  - jointObject: {fileID: 130740836}
-    rotationAxis: {x: 0, y: 0, z: 1}
-    rotationStep: 0.5
-    minRotation: -20
-    maxRotation: 100
-  - jointObject: {fileID: 1637921362}
-    rotationAxis: {x: 0, y: 0, z: 1}
-    rotationStep: 0.5
-    minRotation: -175
-    maxRotation: 85
-  - jointObject: {fileID: 893140563}
-    rotationAxis: {x: 0, y: 0, z: 1}
-    rotationStep: 0.5
-    minRotation: -180
-    maxRotation: 0
-  - jointObject: {fileID: 863791238}
-    rotationAxis: {x: 0, y: 1, z: 0}
-    rotationStep: 0.5
-    minRotation: -180
-    maxRotation: 180
-  - jointObject: {fileID: 269402194}
-    rotationAxis: {x: 1, y: 0, z: 0}
-    rotationStep: 0.5
-    minRotation: 0
-    maxRotation: 90
-  jointState_Pub: {fileID: 190571110}
 --- !u!114 &1544139641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81083,7 +81039,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000000003958122, y: -0.04499994, z: 0.0013530246}
+  m_ConnectedAnchor: {x: -0.000000018859286, y: -0.044999983, z: 0.001353263}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -84639,7 +84595,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0.039, z: 0}
+  m_ConnectedAnchor: {x: 1.4210855e-14, y: 0.039000034, z: 0.00000023841858}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -85810,9 +85766,9 @@ MonoBehaviour:
   width_start: 0
   width_end: 640
   depth_limit: 6500
-  downsample_factor: 3
+  downsample_factor: 1
   point_size_factor: 1
-  near_point_size: 0.002
+  near_point_size: 0.001
   medium_point_size: 0.02
   far_point_size: 0.05
   move_too_far_points: 0
@@ -90422,7 +90378,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1764318554}
   - component: {fileID: 1764318558}
-  - component: {fileID: 1764318557}
   - component: {fileID: 1764318556}
   - component: {fileID: 1764318555}
   m_Layer: 0
@@ -90490,50 +90445,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1764318557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1764318553}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ba2f8c551a5c4443b910f32385cfdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  robotJoints:
-  - jointObject: {fileID: 1645460485}
-    rotationAxis: {x: 0, y: 1, z: 0}
-    rotationStep: 0.5
-    minRotation: -160
-    maxRotation: 160
-  - jointObject: {fileID: 959028828}
-    rotationAxis: {x: 0, y: 0, z: 1}
-    rotationStep: 0.5
-    minRotation: -20
-    maxRotation: 100
-  - jointObject: {fileID: 681133096}
-    rotationAxis: {x: 0, y: 0, z: 1}
-    rotationStep: 0.5
-    minRotation: -175
-    maxRotation: 85
-  - jointObject: {fileID: 2062453696}
-    rotationAxis: {x: 0, y: 0, z: 1}
-    rotationStep: 0.5
-    minRotation: -180
-    maxRotation: 0
-  - jointObject: {fileID: 1598063672}
-    rotationAxis: {x: 0, y: 1, z: 0}
-    rotationStep: 0.5
-    minRotation: -180
-    maxRotation: 180
-  - jointObject: {fileID: 1008051849}
-    rotationAxis: {x: 1, y: 0, z: 0}
-    rotationStep: 0.5
-    minRotation: 0
-    maxRotation: 90
-  jointState_Pub: {fileID: 227272146}
 --- !u!114 &1764318558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105136,7 +105047,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.09046697, y: 0.002747029, z: 0.00012499923}
+  m_ConnectedAnchor: {x: -0.090467, y: 0.002747044, z: 0.00012523765}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -107636,7 +107547,7 @@ Transform:
   m_GameObject: {fileID: 2107115365}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.7634555, y: -1.0466228, z: -0.36722782}
+  m_LocalPosition: {x: -0.308, y: -0.289, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -109714,5 +109625,4 @@ SceneRoots:
   - {fileID: 1682534134}
   - {fileID: 1872377201}
   - {fileID: 1700352464}
-  - {fileID: 367592477}
   - {fileID: 196937424}

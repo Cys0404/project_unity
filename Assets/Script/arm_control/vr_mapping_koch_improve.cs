@@ -80,8 +80,12 @@ public class vr_mapping_koch_improve : MonoBehaviour
     [Tooltip("腳本是否正在執行 Update")]
     [SerializeField] private bool _debugIsUpdating = false;
 
+    [Tooltip("XR Hands 是否已偵測到有效位置")]
+    [SerializeField] private bool _isHandTrackingInitialized = false;
+
     private Quaternion targetRotation;
     private Vector3 targetPosition;
+    private Vector3 _lastHandPosition;
 
     void Start()
     {
@@ -106,6 +110,23 @@ public class vr_mapping_koch_improve : MonoBehaviour
         {
             _debugIsUpdating = false;
             return;
+        }
+
+        // 檢查 XR Hands 是否已偵測到有效位置
+        if (!_isHandTrackingInitialized)
+        {
+            // 檢查手腕位置是否有變化（表示真正開始追蹤了）
+            if (_lastHandPosition != Vector3.zero &&
+                Vector3.Distance(handWrist.position, _lastHandPosition) > 0.001f)
+            {
+                _isHandTrackingInitialized = true;
+                if (debugMessages)
+                {
+                    Debug.Log("[VR_mapping_koch] XR Hands 偵測到，開始追蹤！");
+                }
+            }
+            _lastHandPosition = handWrist.position;
+            return;  // 尚未初始化，不更新 targetEndEffector
         }
 
         _debugIsUpdating = true;
