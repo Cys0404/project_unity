@@ -62,6 +62,7 @@ crashlytics-build.properties
 
 #ignore the 3D model folder
 Assets/3D_Models*
+Assets/交大模擬病房*
 
 #ignore log csv files
 2024*
