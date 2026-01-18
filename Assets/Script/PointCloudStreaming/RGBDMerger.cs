@@ -36,17 +36,7 @@ public class RGBDMerger : MonoBehaviour
     private Vector3 tmp_vector3;
     private Color tmp_color;
 
-    [Tooltip("Point size multiplier, can be very small like 0.001 for fine detail")]
-    [Range(0.001f, 10f)]
-    public float point_size_factor = 1f;
-
-    [Tooltip("Base point size for near objects (< 1m)")]
-    public float near_point_size = 0.012f;
-    [Tooltip("Base point size for medium distance (1-5m)")]
-    public float medium_point_size = 0.02f;
-    [Tooltip("Base point size for far objects (> 5m)")]
-    public float far_point_size = 0.05f;
-
+    public float point_size_factor = 1;
     [Tooltip("If the depth value is too far, move the point to the depth_limit of the point cloud")]
     public bool move_too_far_points = false;
 
@@ -109,7 +99,7 @@ public class RGBDMerger : MonoBehaviour
                         {
                             if (depth_indexer[j, k] > depth_limit)
                             {
-                                continue;
+                                depth_indexer[j, k] = (ushort)depth_limit;
                             }
                             if (depth_indexer[j, k] == 0 && move_too_far_points)
                             {
@@ -133,15 +123,18 @@ public class RGBDMerger : MonoBehaviour
                             tmp_color = new Color(r, g, b);
                             if (depth_indexer[j, k] < 1000)
                             {
-                                tmp_color.a = near_point_size * point_size_factor;
+                                tmp_color.a = 0.012f * point_size_factor; // tips: use rgb a, a to be the size of the point (original is the alpha value of the color)
+
                             }
                             else if (depth_indexer[j, k] >= 1000 && depth_indexer[j, k] <= 5000)
                             {
-                                tmp_color.a = medium_point_size * point_size_factor;
+                                tmp_color.a = 0.02f * point_size_factor;
+
                             }
                             else
                             {
-                                tmp_color.a = far_point_size * point_size_factor;
+                                tmp_color.a = 0.05f * point_size_factor;
+
                             }
                             pcl.Add(tmp_vector3);
 

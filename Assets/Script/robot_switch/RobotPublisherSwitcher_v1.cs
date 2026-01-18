@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,12 +10,11 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
     public class RobotGroup
     {
         public string name = "robot";
-        [Tooltip("©ì¤J­n¤Á´«ªº¡yPublisher ¤¸¥ó¥»¨­¡z¡A­Y»~©ì RosConnector ·|¦Û°Ê©¿²¤¥¦¨Ã´M§ä¦Pª«¥ó¥S§Ì Publisher¡C")]
+        [Tooltip("æ‹–å…¥è¦åˆ‡æ›çš„ã€Publisher å…ƒä»¶æœ¬èº«ã€ï¼Œè‹¥èª¤æ‹– RosConnector æœƒè‡ªå‹•å¿½ç•¥å®ƒä¸¦å°‹æ‰¾åŒç‰©ä»¶å…„å¼Ÿ Publisherã€‚")]
         public Behaviour[] publishers;
     }
 
-    [Header("Switch order: viper ¡÷ stretch3 ¡÷ koch")]
-    public RobotGroup viper = new RobotGroup { name = "viper" };
+    [Header("Switch order: stretch3 â†” koch")]
     public RobotGroup stretch3 = new RobotGroup { name = "stretch3" };
     public RobotGroup koch = new RobotGroup { name = "koch" };
 
@@ -23,34 +22,30 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
     public KeyCode switchKey = KeyCode.Space;
 
     [Header("Advanced")]
-    [Tooltip("±Ò¥Î Publisher «e¡A­Y¨äª«¥ó/¤÷ª«¥ó¬O Inactive¡A·|¤@¸ô SetActive(true)¡C")]
+    [Tooltip("å•Ÿç”¨ Publisher å‰ï¼Œè‹¥å…¶ç‰©ä»¶/çˆ¶ç‰©ä»¶æ˜¯ Inactiveï¼Œæœƒä¸€è·¯ SetActive(true)ã€‚")]
     public bool activateHierarchyOnEnable = true;
 
-    [Tooltip("¬°Á×§K¨ä¥L¸}¥»¦b¦P¤@´V§â¥¦Ãö¦^¥h¡A¤U¤@´V¦A±j¨î¦P¨B¤@¦¸ª¬ºA¡C")]
+    [Tooltip("ç‚ºé¿å…å…¶ä»–è…³æœ¬åœ¨åŒä¸€å¹€æŠŠå®ƒé—œå›å»ï¼Œä¸‹ä¸€å¹€å†å¼·åˆ¶åŒæ­¥ä¸€æ¬¡ç‹€æ…‹ã€‚")]
     public bool reapplyOnNextFrame = true;
 
-    // === Stretch3 ±M¥Î ===
-    [Header("Stretch3 ±M¥Î")]
-    [Tooltip("¤Á´«¨ì stretch3 ®É¡A³o¨Ç¤¸¥ó·|³Q Disable¡FÂ÷¶} stretch3 ®É·|¨Ì¤U¤è¿ï¶µÁÙ­ì¡C")]
-    public Behaviour[] disableWhileStretch3Active;
-    [Tooltip("Â÷¶} stretch3 «á¬O§_¦Û°Ê­«·s±Ò¥Î¤W­±¦C¥Xªº¤¸¥ó¡C")]
-    public bool reenableWhenLeavingStretch3 = true;
+    // === æ©Ÿå™¨äººäº’æ–¥ GameObject æ§åˆ¶ ===
+    [Header("æ©Ÿå™¨äººäº’æ–¥ç‰©ä»¶æ§åˆ¶")]
+    [Tooltip("æ§åˆ¶ Stretch3 æ™‚è¦ Disable çš„ Koch GameObject åˆ—è¡¨")]
+    public GameObject[] disableKochObjects;
+    [Tooltip("æ§åˆ¶ Koch æ™‚è¦ Disable çš„ Stretch3 GameObject åˆ—è¡¨")]
+    public GameObject[] disableStretch3Objects;
 
-    // === ·s¼W Stretch3 GameObject ±±¨î¡]¦hª«¥ó¡^ ===
-    [Tooltip("¤Á´«¨ì stretch3 ¤§¥~®É·|¦Û°Ê Disable¡F¤Á¦^ stretch3 ®É¦Û°Ê Enable¡C¥i©ñ¦h­Ó GameObject¡C")]
-    public GameObject[] stretch3OnlyObjects;
-
-    // 0=viper,1=stretch3,2=koch
+    // 0=stretch3, 1=koch
     [SerializeField] private int currentIndex = 0;
 
     private RobotGroup[] groups;
-    private List<Behaviour>[] resolved; // ¨C²Õ¹ê»Ú­n³Q¤Á´«ªº Publisher ²M³æ
+    private List<Behaviour>[] resolved; // æ¯çµ„å¯¦éš›è¦è¢«åˆ‡æ›çš„ Publisher æ¸…å–®
 
     private void Awake()
     {
-        groups = new[] { viper, stretch3, koch };
+        groups = new[] { stretch3, koch };
         ResolveAll();
-        ApplyActive(0, log: true); // ¹w³] viper
+        ApplyActive(0, log: true); // é è¨­ stretch3
     }
 
     private void Update()
@@ -62,11 +57,11 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
         }
     }
 
-    // --- ¸ÑªR Inspector ¤º®e ¡÷ ¯u¥¿­n¤Áªº Publisher¡]¦Û°Ê²¤¹L/®i¶} Connector¡^ ---
+    // --- è§£æ Inspector å…§å®¹ â†’ çœŸæ­£è¦åˆ‡çš„ Publisherï¼ˆè‡ªå‹•ç•¥é/å±•é–‹ Connectorï¼‰ ---
     private void ResolveAll()
     {
-        resolved = new List<Behaviour>[3];
-        for (int gi = 0; gi < 3; gi++)
+        resolved = new List<Behaviour>[2];
+        for (int gi = 0; gi < 2; gi++)
         {
             var list = new List<Behaviour>();
             var src = groups[gi].publishers ?? Array.Empty<Behaviour>();
@@ -89,9 +84,9 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
             resolved[gi] = list.Where(x => x).Distinct().ToList();
 
             if (resolved[gi].Count == 0)
-                Debug.LogWarning($"[Switcher] '{groups[gi].name}' ¨S¸ÑªR¨ì Publisher¡C");
+                Debug.LogWarning($"[Switcher] '{groups[gi].name}' æ²’è§£æåˆ° Publisherã€‚");
             else
-                Debug.Log($"[Switcher] '{groups[gi].name}' ¸ÑªR¡G{string.Join(" | ", resolved[gi].Select(PathOf))}");
+                Debug.Log($"[Switcher] '{groups[gi].name}' è§£æï¼š{string.Join(" | ", resolved[gi].Select(PathOf))}");
         }
     }
 
@@ -103,10 +98,10 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
             || n.IndexOf("RosConnection", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
-    // --- ®Ö¤ß¤Á´« ---
+    // --- æ ¸å¿ƒåˆ‡æ› ---
     private void ApplyActive(int targetIndex, bool log)
     {
-        if (resolved == null || resolved.Length != 3) ResolveAll();
+        if (resolved == null || resolved.Length != 2) ResolveAll();
 
         for (int gi = 0; gi < resolved.Length; gi++)
         {
@@ -126,35 +121,50 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
             }
         }
 
-        // Stretch3 ±M¥Î¤¸¥ó¶}Ãö
-        bool stretch3Active = (targetIndex == 1);
-
-        if (disableWhileStretch3Active != null && disableWhileStretch3Active.Length > 0)
+        // === æ©Ÿå™¨äººäº’æ–¥ç‰©ä»¶æ§åˆ¶ ===
+        // æ§åˆ¶ Stretch3 æ™‚ï¼ŒDisable Koch ç‰©ä»¶
+        if (targetIndex == 0 && disableKochObjects != null && disableKochObjects.Length > 0)
         {
-            foreach (var beh in disableWhileStretch3Active)
-            {
-                if (!beh) continue;
-                bool target = stretch3Active ? false : (reenableWhenLeavingStretch3 ? true : beh.enabled);
-                beh.enabled = target;
-                if (reapplyOnNextFrame)
-                    StartCoroutine(ReapplyNextFrame(beh, target));
-            }
-        }
-
-        // === ·s¼W¡GStretch3 GameObject ¦hª«¥ó±±¨î ===
-        if (stretch3OnlyObjects != null && stretch3OnlyObjects.Length > 0)
-        {
-            foreach (var go in stretch3OnlyObjects)
+            foreach (var go in disableKochObjects)
             {
                 if (!go) continue;
-                go.SetActive(stretch3Active);
-                Debug.Log($"[Switcher][Stretch3] {(stretch3Active ? "Enable" : "Disable")} GameObject '{go.name}'");
+                go.SetActive(false);
+                Debug.Log($"[Switcher][Stretch3] Disable Koch GameObject '{go.name}'");
+            }
+        }
+        // æ§åˆ¶ Koch æ™‚ï¼ŒDisable Stretch3 ç‰©ä»¶
+        if (targetIndex == 1 && disableStretch3Objects != null && disableStretch3Objects.Length > 0)
+        {
+            foreach (var go in disableStretch3Objects)
+            {
+                if (!go) continue;
+                go.SetActive(false);
+                Debug.Log($"[Switcher][Koch] Disable Stretch3 GameObject '{go.name}'");
+            }
+        }
+        // é›¢é–‹ç•¶å‰æ©Ÿå™¨äººæ™‚ï¼Œé‡æ–°å•Ÿç”¨å°æ–¹çš„ç‰©ä»¶
+        if (targetIndex == 0 && disableStretch3Objects != null && disableStretch3Objects.Length > 0)
+        {
+            foreach (var go in disableStretch3Objects)
+            {
+                if (!go) continue;
+                go.SetActive(true);
+                Debug.Log($"[Switcher][Stretch3] Re-enable Stretch3 GameObject '{go.name}'");
+            }
+        }
+        if (targetIndex == 1 && disableKochObjects != null && disableKochObjects.Length > 0)
+        {
+            foreach (var go in disableKochObjects)
+            {
+                if (!go) continue;
+                go.SetActive(true);
+                Debug.Log($"[Switcher][Koch] Re-enable Koch GameObject '{go.name}'");
             }
         }
 
         int prev = currentIndex;
         currentIndex = targetIndex;
-        if (log) Debug.Log($"[Switcher] {groups[prev].name} ¡÷ {groups[currentIndex].name}");
+        if (log) Debug.Log($"[Switcher] {groups[prev].name} â†’ {groups[currentIndex].name}");
     }
 
     private static void ActivateHierarchy(GameObject go)
@@ -189,6 +199,6 @@ public class RobotPublisherSwitcher_v1 : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OnValidate() { groups = new[] { viper, stretch3, koch }; }
+    private void OnValidate() { groups = new[] { stretch3, koch }; }
 #endif
 }

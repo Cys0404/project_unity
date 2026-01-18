@@ -15,14 +15,9 @@ public class RGBDRender : MonoBehaviour
     MeshRenderer meshRenderer;
     MeshFilter mf;
 
-    [Header("Point Size Settings")]
-    [Tooltip("Global point size multiplier (like RViz, can be 0.001 ~ 10)")]
-    [Range(0.001f, 10f)]
-    public float globalPointSize = 1f;
-
-    [Tooltip("Minimum point size in pixels")]
-    [Range(0.1f, 5f)]
-    public float minPointSizePixels = 0.5f;
+    // The size, positions and colours of each of the pointcloud
+    // public float pointSize = 1f;
+    // public float radius = 0.1f;
 
     [Header("MAKE SURE THESE LISTS ARE MINIMISED OR EDITOR WILL CRASH")]
     private Vector3[] positions = new Vector3[] { new Vector3(0, 0, 0) };
@@ -76,14 +71,9 @@ public class RGBDRender : MonoBehaviour
     {
         transform.position = offset.position;
         transform.rotation = offset.rotation;
+        //meshRenderer.material.SetFloat("_PointSize", pointSize);
 
-        // 更新 shader 的點大小參數
-        if (meshRenderer != null && meshRenderer.material != null)
-        {
-            meshRenderer.material.SetFloat("_PointScale", globalPointSize);
-            meshRenderer.material.SetFloat("_MinPointSize", minPointSizePixels);
-        }
-
+        // meshRenderer.material.SetFloat("_PointSize", pointSize);
         UpdateMesh();
         // Debug.Log(DateTime.Now.ToString("HH:mm:ss.ffffff"));
     }
