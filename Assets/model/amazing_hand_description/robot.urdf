@@ -1,0 +1,2841 @@
+<?xml version="1.0" ?>
+<!-- Generated using onshape-to-robot -->
+<!-- Onshape https://cad.onshape.com/documents/430ff184cf3dd9557aaff2be/w/e3658b7152c139971d22c688/e/a5789448a382c9e7e5c5750a -->
+<robot name="mjcf">
+  <!-- Link r_wrist_interface -->
+  <link name="r_wrist_interface">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part scs0009 -->
+    <visual>
+      <origin xyz="-0.022075 0.03055 0.0698" rpy="-4.889e-16 -9.99201e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_1 -->
+    <visual>
+      <origin xyz="-0.0115 0.0245 0.1022" rpy="1.5708 8.88178e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_1.stl"/>
+      </geometry>
+      <material name="finger_frame_1_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part r_hand_plate -->
+    <visual>
+      <origin xyz="-0.0115 0.0245 0.1022" rpy="1.5708 5.43065e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/r_hand_plate.stl"/>
+      </geometry>
+      <material name="r_hand_plate_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_2 -->
+    <visual>
+      <origin xyz="-0.00443741 0.0191037 0.019125" rpy="-1.5708 1.87218e-16 -1.22173"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_2_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_2 -->
+    <visual>
+      <origin xyz="-0.0115 -0.0083 0.0961543" rpy="1.5708 0.10472 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_2.stl"/>
+      </geometry>
+      <material name="finger_frame_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_2_2 -->
+    <visual>
+      <origin xyz="-0.0115 -0.0405 0.0851417" rpy="1.5708 0.235619 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_2.stl"/>
+      </geometry>
+      <material name="finger_frame_2_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04 -->
+    <visual>
+      <origin xyz="-0.015 -0.0083 0.0961543" rpy="-1.5708 0.10472 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_2 -->
+    <visual>
+      <origin xyz="-0.015 0.0245 0.1022" rpy="-1.5708 9.4369e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_2_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_3 -->
+    <visual>
+      <origin xyz="-0.015 -0.0405 0.0851417" rpy="-1.5708 0.235619 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_3_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_4 -->
+    <visual>
+      <origin xyz="-0.025 -0.0083 0.0961543" rpy="1.5708 0.10472 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_4_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_2_3 -->
+    <visual>
+      <origin xyz="0.0280778 0.0245 0.0297" rpy="3.14159 -1.87218e-16 1.91986"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_2.stl"/>
+      </geometry>
+      <material name="finger_frame_2_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_3 -->
+    <visual>
+      <origin xyz="-0.022075 -0.0109301 0.0632994" rpy="-3.42431e-16 -0.10472 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_3_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_4 -->
+    <visual>
+      <origin xyz="-0.022075 0.01845 0.0698" rpy="-4.64528e-16 -8.88178e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_4_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_2_4 -->
+    <visual>
+      <origin xyz="-0.0109 0.0245 0.1022" rpy="1.5708 8.88178e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_2.stl"/>
+      </geometry>
+      <material name="finger_frame_2_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_5 -->
+    <visual>
+      <origin xyz="-0.022075 0.00110358 0.0645642" rpy="-2.22894e-16 -0.10472 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_5_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_6 -->
+    <visual>
+      <origin xyz="-0.022075 -0.0388192 0.0522246" rpy="-3.5777e-17 -0.235619 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_6_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_1_2 -->
+    <visual>
+      <origin xyz="-0.0115 -0.0083 0.0961543" rpy="1.5708 0.10472 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_1.stl"/>
+      </geometry>
+      <material name="finger_frame_1_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_5 -->
+    <visual>
+      <origin xyz="0.0280778 0.0245 0.0262" rpy="-1.83187e-15 -3.28174e-16 1.91986"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_5_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_7 -->
+    <visual>
+      <origin xyz="-0.022075 -0.0270535 0.0550493" rpy="-1.14076e-17 -0.235619 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_7_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part r_wrist_interface -->
+    <visual>
+      <origin xyz="-0.0115 0.0245 0.1022" rpy="1.5708 5.55112e-17 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/r_wrist_interface.stl"/>
+      </geometry>
+      <material name="r_wrist_interface_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part scs0009_8 -->
+    <visual>
+      <origin xyz="-0.000298971 0.00773341 0.019125" rpy="-1.5708 1.87218e-16 -1.22173"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/scs0009.stl"/>
+      </geometry>
+      <material name="scs0009_8_material">
+        <color rgba="0.262745 0.282353 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_6 -->
+    <visual>
+      <origin xyz="-0.025 0.0245 0.1022" rpy="1.5708 8.32667e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_6_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_7 -->
+    <visual>
+      <origin xyz="-0.025 -0.0405 0.0851417" rpy="1.5708 0.235619 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_7_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part bushing_0608_04_8 -->
+    <visual>
+      <origin xyz="0.0280778 0.0245 0.0162" rpy="3.14159 -3.43404e-16 1.91986"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/bushing_0608_04.stl"/>
+      </geometry>
+      <material name="bushing_0608_04_8_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_1_3 -->
+    <visual>
+      <origin xyz="-0.0115 -0.0405 0.0851417" rpy="1.5708 0.235619 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_1.stl"/>
+      </geometry>
+      <material name="finger_frame_1_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part finger_frame_1_4 -->
+    <visual>
+      <origin xyz="0.0280778 0.0245 0.0297" rpy="3.14159 -1.87218e-16 1.91986"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/finger_frame_1.stl"/>
+      </geometry>
+      <material name="finger_frame_1_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_1 (1)_2 (dummy link + fixed joint) -->
+  <link name="closing_1 (1)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (1)_2_frame" type="fixed">
+    <origin xyz="-0.015 0.0245 0.1022" rpy="1.5708 9.4369e-16 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (1)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (1)_2_z (dummy link + fixed joint) -->
+  <link name="closing_1 (1)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (1)_2_z_frame" type="fixed">
+    <origin xyz="-0.115 0.0245 0.1022" rpy="1.5708 9.4369e-16 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (1)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (2)_2 (dummy link + fixed joint) -->
+  <link name="closing_1 (2)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (2)_2_frame" type="fixed">
+    <origin xyz="-0.015 -0.0083 0.0961543" rpy="1.5708 0.10472 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (2)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (2)_2_z (dummy link + fixed joint) -->
+  <link name="closing_1 (2)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (2)_2_z_frame" type="fixed">
+    <origin xyz="-0.115 -0.0083 0.0961543" rpy="1.5708 0.10472 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (2)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (3)_2 (dummy link + fixed joint) -->
+  <link name="closing_1 (3)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (3)_2_frame" type="fixed">
+    <origin xyz="-0.015 -0.0405 0.0851417" rpy="1.5708 0.235619 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (3)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (3)_2_z (dummy link + fixed joint) -->
+  <link name="closing_1 (3)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (3)_2_z_frame" type="fixed">
+    <origin xyz="-0.115 -0.0405 0.0851417" rpy="1.5708 0.235619 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (3)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (4)_2 (dummy link + fixed joint) -->
+  <link name="closing_1 (4)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (4)_2_frame" type="fixed">
+    <origin xyz="0.0280778 0.0245 0.0262" rpy="3.14159 -3.28174e-16 1.91986"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (4)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (4)_2_z (dummy link + fixed joint) -->
+  <link name="closing_1 (4)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (4)_2_z_frame" type="fixed">
+    <origin xyz="0.0280778 0.0245 -0.0738" rpy="3.14159 -3.28174e-16 1.91986"/>
+    <parent link="r_wrist_interface"/>
+    <child link="closing_1 (4)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link custom_servo_horn -->
+  <link name="custom_servo_horn">
+    <inertial>
+      <origin xyz="-0.005 1.45504e-17 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="-5.13695e-25" ixz="3.61104e-25" iyy="4.63584e-09" iyz="-1.47357e-24" izz="1e-09"/>
+    </inertial>
+    <!-- Part rotule_ball -->
+    <visual>
+      <origin xyz="-0.005 1.38778e-17 -0.0069" rpy="1.11022e-16 -1.11022e-16 3.78801e-27"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed -->
+    <visual>
+      <origin xyz="-0.005 1.38778e-17 -0.0114" rpy="3.14159 3.33067e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn -->
+    <visual>
+      <origin xyz="0 1.38778e-17 -0.0025" rpy="3.14159 4.11691e-31 3.78801e-27"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link -->
+  <link name="ball_link">
+    <inertial>
+      <origin xyz="-1.37306e-13 -0.0165 -1.37299e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66013e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.66027e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever -->
+    <visual>
+      <origin xyz="-1.38778e-17 -0.033 0" rpy="-3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_2 -->
+    <visual>
+      <origin xyz="-3.46945e-18 0 0" rpy="6.76417e-18 -8.5799e-17 6.32422e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_2_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18 -->
+    <visual>
+      <origin xyz="3.46945e-18 -0.03325 -2.77556e-17" rpy="-1.89935e-15 1.06364e-15 3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer -->
+    <visual>
+      <origin xyz="-1.04083e-17 -0.033 0" rpy="-1.24011e-17 2.95429e-16 3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link rotule_ball -->
+  <link name="rotule_ball">
+    <inertial>
+      <origin xyz="-0.0054579 -0.0141744 -0.00370248" rpy="0 0 0"/>
+      <mass value="0.00277119"/>
+      <inertia ixx="7.66485e-07" ixy="1.1411e-07" ixz="-1.27899e-08" iyy="1.05617e-07" iyz="-3.77417e-08" izz="7.96842e-07"/>
+    </inertial>
+    <!-- Part link -->
+    <visual>
+      <origin xyz="-0.0129642 -0.00307086 0.00472763" rpy="-0.432513 0.619056 -3.01182"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/link.stl"/>
+      </geometry>
+      <material name="link_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_2 -->
+    <visual>
+      <origin xyz="0.0036341 0.000474272 0.0026112" rpy="-0.905424 0.348374 -1.17928"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_2_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_2 -->
+    <visual>
+      <origin xyz="0 0 3.46945e-18" rpy="-2.60982 0.832224 0.80183"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_2_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_3 -->
+    <visual>
+      <origin xyz="-0.0166361 -0.00217111 -0.0119535" rpy="2.23617 0.348374 -1.17928"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_3_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_3 -->
+    <visual>
+      <origin xyz="-0.013002 -0.00169684 -0.0093423" rpy="0.53177 0.832224 0.80183"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_3_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball1_2 (dummy link + fixed joint) -->
+  <link name="closing_ball1_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball1_2_frame" type="fixed">
+    <origin xyz="-0.013002 -0.00169684 -0.0093423" rpy="-0.905424 0.348374 -1.17928"/>
+    <parent link="rotule_ball"/>
+    <child link="closing_ball1_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default -->
+  <link name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default">
+    <inertial>
+      <origin xyz="-0.00530874 -0.00868244 0.00225" rpy="0 0 0"/>
+      <mass value="0.00201325"/>
+      <inertia ixx="9.34482e-08" ixy="-4.54529e-08" ixz="-5.37212e-21" iyy="4.69015e-08" iyz="1.88791e-21" izz="1.16807e-07"/>
+    </inertial>
+    <!-- Part std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default -->
+    <visual>
+      <origin xyz="-0.0113198 -0.0185136 0.00225" rpy="-1.02201 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default.stl"/>
+      </geometry>
+      <material name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part gimbal -->
+    <visual>
+      <origin xyz="-0.0031299 -0.00511895 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/gimbal.stl"/>
+      </geometry>
+      <material name="gimbal_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5 -->
+    <visual>
+      <origin xyz="-0.0103287 -0.0168926 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5.stl"/>
+      </geometry>
+      <material name="plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999 -->
+    <visual>
+      <origin xyz="8.32667e-17 -4.85723e-17 0.00225" rpy="1.19423e-13 -1.70293e-14 1.02201"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_1 (1)_1 (dummy link + fixed joint) -->
+  <link name="closing_1 (1)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (1)_1_frame" type="fixed">
+    <origin xyz="-0.00495568 -0.00810501 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default"/>
+    <child link="closing_1 (1)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (1)_1_z (dummy link + fixed joint) -->
+  <link name="closing_1 (1)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (1)_1_z_frame" type="fixed">
+    <origin xyz="-0.0571208 -0.0934209 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default"/>
+    <child link="closing_1 (1)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (1)_2 (dummy link + fixed joint) -->
+  <link name="closing_3 (1)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (1)_2_frame" type="fixed">
+    <origin xyz="-0.0031299 -0.00511895 -0.00275" rpy="1.67382e-14 1.1953e-13 -0.548785"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default"/>
+    <child link="closing_3 (1)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (1)_2_z (dummy link + fixed joint) -->
+  <link name="closing_3 (1)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (1)_2_z_frame" type="fixed">
+    <origin xyz="-0.0031299 -0.00511895 0.09725" rpy="1.67382e-14 1.1953e-13 -0.548785"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default"/>
+    <child link="closing_3 (1)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball to std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default -->
+  <joint name="passive2 (1)" type="revolute">
+    <origin xyz="-0.0116897 -0.000368272 -0.00081146" rpy="-0.905424 0.348374 -1.17928"/>
+    <parent link="rotule_ball"/>
+    <child link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999 -->
+  <link name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999">
+    <inertial>
+      <origin xyz="0.014571 -0.0133924 0.00225" rpy="0 0 0"/>
+      <mass value="0.00540375"/>
+      <inertia ixx="3.60212e-07" ixy="3.36413e-07" ixz="4.59411e-20" iyy="5.51031e-07" iyz="6.20895e-20" izz="7.69492e-07"/>
+    </inertial>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165558 -0.00735" rpy="-6.21242e-14 -1.62049e-13 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_2 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165558 0.01185" rpy="3.14159 -1.1368e-13 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_2_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part distal -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207565 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal.stl"/>
+      </geometry>
+      <material name="distal_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part distal_shell -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207565 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal_shell.stl"/>
+      </geometry>
+      <material name="distal_shell_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2 -->
+    <visual>
+      <origin xyz="5.55112e-17 6.93889e-17 0.00225" rpy="-3.14159 1.13938e-13 -2.11105"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame tip1 (dummy link + fixed joint) -->
+  <link name="tip1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="tip1_frame" type="fixed">
+    <origin xyz="0.0272563 -0.0277177 0.00225" rpy="-1.5708 1.1547e-13 -2.15215"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999"/>
+    <child link="tip1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b -->
+  <link name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b">
+    <inertial>
+      <origin xyz="-0.0249171 -0.00392936 0.0052354" rpy="0 0 0"/>
+      <mass value="0.0101851"/>
+      <inertia ixx="4.96149e-07" ixy="2.45138e-08" ixz="1.19032e-10" iyy="2.52849e-06" iyz="3.03943e-10" izz="2.3577e-06"/>
+    </inertial>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_3 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 -0.00655" rpy="3.91111e-16 -4.75277e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_3_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_4 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 0.01685" rpy="-3.14159 -4.01938e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_4_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b -->
+    <visual>
+      <origin xyz="-0.052 0 0.00515" rpy="-9.4379e-16 -3.86744e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2 -->
+    <visual>
+      <origin xyz="-2.77556e-17 -4.16334e-17 0.00515" rpy="-5.51727e-17 -3.91969e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal_shell -->
+    <visual>
+      <origin xyz="-0.052 -1.38778e-17 0.00515" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal_shell.stl"/>
+      </geometry>
+      <material name="proximal_shell_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal -->
+    <visual>
+      <origin xyz="-0.052 1.38778e-17 0.00525" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal.stl"/>
+      </geometry>
+      <material name="proximal_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_3 (1)_1 (dummy link + fixed joint) -->
+  <link name="closing_3 (1)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (1)_1_frame" type="fixed">
+    <origin xyz="-0.052 1.38778e-17 0" rpy="-3.6024e-19 -3.38492e-19 5.4731e-17"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b"/>
+    <child link="closing_3 (1)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (1)_1_z (dummy link + fixed joint) -->
+  <link name="closing_3 (1)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (1)_1_z_frame" type="fixed">
+    <origin xyz="-0.052 2.77556e-17 0.1" rpy="-3.6024e-19 -3.38492e-19 5.4731e-17"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b"/>
+    <child link="closing_3 (1)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999 to parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b -->
+  <joint name="passive_5 (1)" type="revolute">
+    <origin xyz="-0.000346366 -0.00598999 0.00655" rpy="-3.14159 -9.3884e-14 0.00396328"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999"/>
+    <child link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from rotule_ball to parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999 -->
+  <joint name="passive4 (1)" type="revolute">
+    <origin xyz="0.00373407 -0.0482013 -0.00704062" rpy="2.23617 0.348374 -1.17928"/>
+    <parent link="rotule_ball"/>
+    <child link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from ball_link to rotule_ball -->
+  <joint name="passive_ball2" type="ball">
+    <origin xyz="-1.38778e-17 -0.033 0" rpy="3.64074e-16 -1.5708 0"/>
+    <parent link="ball_link"/>
+    <child link="rotule_ball"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from custom_servo_horn to ball_link -->
+  <joint name="passive_ball1" type="ball">
+    <origin xyz="-0.005 1.94289e-16 -0.0069" rpy="3.07273 0.942325 -0.157455"/>
+    <parent link="custom_servo_horn"/>
+    <child link="ball_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to custom_servo_horn -->
+  <joint name="finger1_motor1" type="revolute">
+    <origin xyz="-0.00755 0.03055 0.0698" rpy="1.5708 2.65961e-11 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="custom_servo_horn"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Link rotule_ball_2 -->
+  <link name="rotule_ball_2">
+    <inertial>
+      <origin xyz="-0.005 2.84282e-17 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="-1.2178e-24" ixz="2.21903e-24" iyy="4.63584e-09" iyz="1.16353e-24" izz="1e-09"/>
+    </inertial>
+    <!-- Part custom_servo_horn_2 -->
+    <visual>
+      <origin xyz="0 1.38778e-17 -0.0025" rpy="-3.14159 4.10461e-32 -7.74224e-32"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_2_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_4 -->
+    <visual>
+      <origin xyz="-0.005 2.77556e-17 -0.0069" rpy="8.73688e-15 -8.81492e-15 -1.82212e-29"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_4_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_4 -->
+    <visual>
+      <origin xyz="-0.005 2.77556e-17 -0.0114" rpy="3.14159 1.11022e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_4_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link m2_rod_l18 -->
+  <link name="m2_rod_l18">
+    <inertial>
+      <origin xyz="-1.37295e-13 -0.0165 -1.373e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66042e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.66032e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_3 -->
+    <visual>
+      <origin xyz="0 1.38778e-17 0" rpy="-9.99869e-18 -5.28875e-18 3.54515e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_3_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_2 -->
+    <visual>
+      <origin xyz="0 1.38778e-17 0" rpy="-4.15262e-17 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_2_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_2 -->
+    <visual>
+      <origin xyz="1.9082e-17 0.00025 -9.1073e-18" rpy="-1.46497e-15 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_2_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_4 -->
+    <visual>
+      <origin xyz="1.12757e-17 -0.033 -3.90313e-18" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_4_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball1_1 (dummy link + fixed joint) -->
+  <link name="closing_ball1_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball1_1_frame" type="fixed">
+    <origin xyz="1.12757e-17 -0.033 -3.90313e-18" rpy="3.14159 -1.5708 0"/>
+    <parent link="m2_rod_l18"/>
+    <child link="closing_ball1_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_2 to m2_rod_l18 -->
+  <joint name="passive_ball3" type="ball">
+    <origin xyz="-0.005 0 -0.0069" rpy="3.07997 0.854242 -3.10758"/>
+    <parent link="rotule_ball_2"/>
+    <child link="m2_rod_l18"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to rotule_ball_2 -->
+  <joint name="finger1_motor2" type="revolute">
+    <origin xyz="-0.00755 0.01845 0.0698" rpy="-1.5708 -3.90139e-15 1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="rotule_ball_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Link custom_servo_horn_2 -->
+  <link name="custom_servo_horn_2">
+    <inertial>
+      <origin xyz="-0.005 5.47982e-18 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="6.82528e-24" ixz="-1.65246e-24" iyy="4.63584e-09" iyz="1.18606e-24" izz="1e-09"/>
+    </inertial>
+    <!-- Part rotule_ball_5 -->
+    <visual>
+      <origin xyz="-0.005 2.77556e-17 -0.0069" rpy="-1.3596e-15 -1.80752e-16 8.54903e-16"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_5_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_5 -->
+    <visual>
+      <origin xyz="-0.005 0 -0.0114" rpy="-3.14159 -2.16375e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_5_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn_3 -->
+    <visual>
+      <origin xyz="1.73472e-18 1.38778e-17 -0.0025" rpy="-3.14159 1.02653e-31 1.50825e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_3_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link_2 -->
+  <link name="ball_link_2">
+    <inertial>
+      <origin xyz="-1.37297e-13 -0.0165 -1.37299e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66037e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.66028e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_5 -->
+    <visual>
+      <origin xyz="0 6.93889e-18 -4.33681e-19" rpy="1.15138e-17 -1.68136e-18 1.65057e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_5_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_6 -->
+    <visual>
+      <origin xyz="3.46945e-18 -0.033 0" rpy="-3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_6_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_3 -->
+    <visual>
+      <origin xyz="0 0.00025 2.60209e-18" rpy="3.77822e-17 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_3_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_3 -->
+    <visual>
+      <origin xyz="0 4.71845e-16 1.60462e-17" rpy="-2.28555e-15 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_3_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link rotule_ball_3 -->
+  <link name="rotule_ball_3">
+    <inertial>
+      <origin xyz="0.000207771 -0.0141744 0.00659195" rpy="0 0 0"/>
+      <mass value="0.00277119"/>
+      <inertia ixx="7.98533e-07" ixy="-9.75532e-08" ixz="-1.04582e-08" iyy="1.05617e-07" iyz="-7.02058e-08" izz="7.64793e-07"/>
+    </inertial>
+    <!-- Part rotule_ball_6 -->
+    <visual>
+      <origin xyz="7.23262e-05 -0.00169684 0.0160102" rpy="3.05145 -0.05525 2.63575"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_6_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_6 -->
+    <visual>
+      <origin xyz="-2.02154e-05 0.000474272 -0.00447489" rpy="3.08612 0.0900023 -2.08163"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_6_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part link_2 -->
+    <visual>
+      <origin xyz="0.0114391 -0.00307086 0.00771803" rpy="-2.12173 -1.46511 -1.5282"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/link.stl"/>
+      </geometry>
+      <material name="link_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_7 -->
+    <visual>
+      <origin xyz="9.25416e-05 -0.00217111 0.0204851" rpy="-0.0554748 0.0900023 -2.08163"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_7_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_7 -->
+    <visual>
+      <origin xyz="4.33681e-19 1.38778e-17 -6.93889e-18" rpy="-0.0901402 -0.05525 2.63575"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_7_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball2_2 (dummy link + fixed joint) -->
+  <link name="closing_ball2_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball2_2_frame" type="fixed">
+    <origin xyz="7.23262e-05 -0.00169684 0.0160102" rpy="-3.05145 0.05525 -0.505843"/>
+    <parent link="rotule_ball_3"/>
+    <child link="closing_ball2_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2 -->
+  <link name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2">
+    <inertial>
+      <origin xyz="-0.00530874 -0.00868244 0.00225" rpy="0 0 0"/>
+      <mass value="0.00201325"/>
+      <inertia ixx="9.34482e-08" ixy="-4.54529e-08" ixz="4.13712e-22" iyy="4.69015e-08" iyz="-1.1292e-21" izz="1.16807e-07"/>
+    </inertial>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3 -->
+    <visual>
+      <origin xyz="1.52656e-16 -9.71445e-17 0.00225" rpy="-2.06852e-14 -7.96028e-15 1.02201"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2 -->
+    <visual>
+      <origin xyz="-0.0113198 -0.0185136 0.00225" rpy="-1.02201 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default.stl"/>
+      </geometry>
+      <material name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_2 -->
+    <visual>
+      <origin xyz="-0.0103287 -0.0168926 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5.stl"/>
+      </geometry>
+      <material name="plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_2_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part gimbal_2 -->
+    <visual>
+      <origin xyz="-0.0031299 -0.00511895 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/gimbal.stl"/>
+      </geometry>
+      <material name="gimbal_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_1 (2)_1 (dummy link + fixed joint) -->
+  <link name="closing_1 (2)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (2)_1_frame" type="fixed">
+    <origin xyz="-0.00495568 -0.00810501 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2"/>
+    <child link="closing_1 (2)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (2)_1_z (dummy link + fixed joint) -->
+  <link name="closing_1 (2)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (2)_1_z_frame" type="fixed">
+    <origin xyz="-0.0571208 -0.0934209 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2"/>
+    <child link="closing_1 (2)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (2)_2 (dummy link + fixed joint) -->
+  <link name="closing_3 (2)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (2)_2_frame" type="fixed">
+    <origin xyz="-0.0031299 -0.00511895 -0.00275" rpy="7.96028e-15 -2.02164e-14 -0.548785"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2"/>
+    <child link="closing_3 (2)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (2)_2_z (dummy link + fixed joint) -->
+  <link name="closing_3 (2)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (2)_2_z_frame" type="fixed">
+    <origin xyz="-0.0031299 -0.00511895 0.09725" rpy="7.96028e-15 -2.02164e-14 -0.548785"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2"/>
+    <child link="closing_3 (2)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_3 to std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2 -->
+  <joint name="passive2 (2)" type="revolute">
+    <origin xyz="0.00620709 -0.000368272 0.00993876" rpy="3.08612 0.0900023 -2.08163"/>
+    <parent link="rotule_ball_3"/>
+    <child link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2 -->
+  <link name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2">
+    <inertial>
+      <origin xyz="0.014571 -0.0133924 0.00225" rpy="0 0 0"/>
+      <mass value="0.00540375"/>
+      <inertia ixx="3.60212e-07" ixy="3.36413e-07" ixz="-3.33157e-22" iyy="5.51031e-07" iyz="-1.62812e-22" izz="7.69492e-07"/>
+    </inertial>
+    <!-- Part distal_2 -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207565 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal.stl"/>
+      </geometry>
+      <material name="distal_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_5 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165558 0.01185" rpy="-3.14159 1.38802e-14 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_5_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part distal_shell_2 -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207565 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal_shell.stl"/>
+      </geometry>
+      <material name="distal_shell_2_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_6 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165558 -0.00735" rpy="1.88691e-14 1.40392e-14 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_6_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4 -->
+    <visual>
+      <origin xyz="2.77556e-17 1.38778e-17 0.00225" rpy="-3.14159 -1.31564e-15 -2.11105"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame tip2 (dummy link + fixed joint) -->
+  <link name="tip2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="tip2_frame" type="fixed">
+    <origin xyz="0.0272563 -0.0277177 0.00225" rpy="-1.5708 -3.85349e-16 -2.15215"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2"/>
+    <child link="tip2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2 -->
+  <link name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2">
+    <inertial>
+      <origin xyz="-0.0249171 -0.00392936 0.0052354" rpy="0 0 0"/>
+      <mass value="0.0101851"/>
+      <inertia ixx="4.96149e-07" ixy="2.45138e-08" ixz="1.19032e-10" iyy="2.52849e-06" iyz="3.03943e-10" izz="2.3577e-06"/>
+    </inertial>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3 -->
+    <visual>
+      <origin xyz="2.77556e-17 1.38778e-17 0.00515" rpy="-2.00677e-16 4.10186e-18 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_7 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 0.01685" rpy="3.14159 1.06996e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_7_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_8 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 -0.00655" rpy="-1.26114e-15 5.80929e-17 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_8_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal_2 -->
+    <visual>
+      <origin xyz="-0.052 2.08167e-17 0.00525" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal.stl"/>
+      </geometry>
+      <material name="proximal_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal_shell_2 -->
+    <visual>
+      <origin xyz="-0.052 2.77556e-17 0.00515" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal_shell.stl"/>
+      </geometry>
+      <material name="proximal_shell_2_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4 -->
+    <visual>
+      <origin xyz="-0.052 2.77556e-17 0.00515" rpy="9.84353e-16 1.98307e-17 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_3 (2)_1 (dummy link + fixed joint) -->
+  <link name="closing_3 (2)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (2)_1_frame" type="fixed">
+    <origin xyz="-0.052 2.08167e-17 -2.60209e-18" rpy="-4.02625e-18 9.42857e-18 1.09888e-16"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2"/>
+    <child link="closing_3 (2)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (2)_1_z (dummy link + fixed joint) -->
+  <link name="closing_3 (2)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (2)_1_z_frame" type="fixed">
+    <origin xyz="-0.052 2.77556e-17 0.1" rpy="-4.02625e-18 9.42857e-18 1.09888e-16"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2"/>
+    <child link="closing_3 (2)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2 to parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2 -->
+  <joint name="passive_5 (2)" type="revolute">
+    <origin xyz="-0.000346366 -0.00598999 0.00655" rpy="3.14159 2.16583e-14 0.00396328"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2"/>
+    <child link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from rotule_ball_3 to parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2 -->
+  <joint name="passive4 (2)" type="revolute">
+    <origin xyz="-0.00789165 -0.0482013 0.00111154" rpy="-0.0554748 0.0900023 -2.08163"/>
+    <parent link="rotule_ball_3"/>
+    <child link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from ball_link_2 to rotule_ball_3 -->
+  <joint name="passive_ball5" type="ball">
+    <origin xyz="3.46945e-18 -0.033 0" rpy="1.65057e-17 -1.5708 0"/>
+    <parent link="ball_link_2"/>
+    <child link="rotule_ball_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from custom_servo_horn_2 to ball_link_2 -->
+  <joint name="passive_ball4" type="ball">
+    <origin xyz="-0.005 0 -0.0069" rpy="0.0404614 -0.000226677 3.03986"/>
+    <parent link="custom_servo_horn_2"/>
+    <child link="ball_link_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to custom_servo_horn_2 -->
+  <joint name="finger2_motor1" type="revolute">
+    <origin xyz="-0.00755 0.00110358 0.0645642" rpy="1.5708 0.10472 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="custom_servo_horn_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Link rotule_ball_4 -->
+  <link name="rotule_ball_4">
+    <inertial>
+      <origin xyz="-0.005 -1.91127e-17 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="-1.64426e-23" ixz="6.21326e-24" iyy="4.63584e-09" iyz="6.14951e-24" izz="1e-09"/>
+    </inertial>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_8 -->
+    <visual>
+      <origin xyz="-0.005 -1.38778e-17 -0.0114" rpy="3.14159 -1.46985e-15 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_8_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_8 -->
+    <visual>
+      <origin xyz="-0.005 -1.38778e-17 -0.0069" rpy="1.20429e-16 -2.2753e-16 2.73555e-19"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_8_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn_4 -->
+    <visual>
+      <origin xyz="0 0 -0.0025" rpy="-3.14159 -3.51528e-32 -1.70307e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_4_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link_3 -->
+  <link name="ball_link_3">
+    <inertial>
+      <origin xyz="-1.37298e-13 -0.0165 -1.373e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66118e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.66e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_7 -->
+    <visual>
+      <origin xyz="0 -0.033 -4.33681e-19" rpy="-3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_7_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_8 -->
+    <visual>
+      <origin xyz="1.73472e-18 0 -8.67362e-19" rpy="2.00322e-18 7.1353e-20 -1.82903e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_8_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_4 -->
+    <visual>
+      <origin xyz="1.73472e-18 -0.03325 -1.73472e-18" rpy="-2.41888e-18 8.85874e-19 -3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_4_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_4 -->
+    <visual>
+      <origin xyz="-1.73472e-18 -0.033 -1.30104e-18" rpy="-7.03351e-18 2.14175e-19 -3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_4_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball2_1 (dummy link + fixed joint) -->
+  <link name="closing_ball2_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball2_1_frame" type="fixed">
+    <origin xyz="0 -0.033 -4.33681e-19" rpy="-3.14159 -1.5708 0"/>
+    <parent link="ball_link_3"/>
+    <child link="closing_ball2_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_4 to ball_link_3 -->
+  <joint name="passive_ball6" type="ball">
+    <origin xyz="-0.005 0 -0.0069" rpy="0.0404614 -0.000817724 0.0804766"/>
+    <parent link="rotule_ball_4"/>
+    <child link="ball_link_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to rotule_ball_4 -->
+  <joint name="finger2_motor2" type="revolute">
+    <origin xyz="-0.00755 -0.0109301 0.0632994" rpy="-1.5708 -0.10472 1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="rotule_ball_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Link custom_servo_horn_3 -->
+  <link name="custom_servo_horn_3">
+    <inertial>
+      <origin xyz="-0.005 -2.5899e-18 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="4.09994e-25" ixz="-7.83529e-24" iyy="4.63584e-09" iyz="7.96982e-24" izz="1e-09"/>
+    </inertial>
+    <!-- Part rotule_ball_9 -->
+    <visual>
+      <origin xyz="-0.005 -6.93889e-18 -0.0069" rpy="-1.0517e-15 -4.22338e-15 1.78844e-15"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_9_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn_5 -->
+    <visual>
+      <origin xyz="-1.73472e-18 2.08167e-17 -0.0025" rpy="3.14159 -7.42507e-32 1.36205e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_5_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_9 -->
+    <visual>
+      <origin xyz="-0.005 0 -0.0114" rpy="-3.14159 -1.93019e-15 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_9_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link_4 -->
+  <link name="ball_link_4">
+    <inertial>
+      <origin xyz="-1.37304e-13 -0.0165 -1.37284e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.65963e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.65957e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_9 -->
+    <visual>
+      <origin xyz="-6.83047e-18 -1.38778e-17 -4.33681e-19" rpy="3.32141e-17 3.21341e-17 -9.7375e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_9_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_10 -->
+    <visual>
+      <origin xyz="-2.6563e-18 -0.033 5.0307e-17" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_10_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_5 -->
+    <visual>
+      <origin xyz="-7.12863e-18 0.00025 0" rpy="3.29603e-15 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_5_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_5 -->
+    <visual>
+      <origin xyz="-9.02598e-18 -1.11022e-16 0" rpy="7.05814e-15 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_5_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link rotule_ball_5 -->
+  <link name="rotule_ball_5">
+    <inertial>
+      <origin xyz="-0.00392912 -0.0141744 -0.00529707" rpy="0 0 0"/>
+      <mass value="0.00277119"/>
+      <inertia ixx="7.77768e-07" ixy="1.20172e-07" ixz="-1.94628e-08" iyy="1.05617e-07" iyz="2.05636e-09" izz="7.85559e-07"/>
+    </inertial>
+    <!-- Part rotule_ball_10 -->
+    <visual>
+      <origin xyz="-0.00918769 -0.00169684 -0.0131117" rpy="0.245192 0.574432 0.614195"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_10_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_11 -->
+    <visual>
+      <origin xyz="-2.60209e-18 0 -8.40257e-19" rpy="-2.8964 0.574432 0.614195"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_11_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_10 -->
+    <visual>
+      <origin xyz="-0.0117557 -0.00217111 -0.0167765" rpy="2.55323 0.20522 -1.09173"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_10_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part link_3 -->
+    <visual>
+      <origin xyz="-0.0137982 -0.00307086 0.000181431" rpy="-0.358808 0.951681 -2.95896"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/link.stl"/>
+      </geometry>
+      <material name="link_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_11 -->
+    <visual>
+      <origin xyz="0.00256799 0.000474272 0.00366477" rpy="-0.588368 0.20522 -1.09173"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_11_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball3_2 (dummy link + fixed joint) -->
+  <link name="closing_ball3_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball3_2_frame" type="fixed">
+    <origin xyz="-0.00918769 -0.00169684 -0.0131117" rpy="2.8964 -0.574432 -2.5274"/>
+    <parent link="rotule_ball_5"/>
+    <child link="closing_ball3_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3 -->
+  <link name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3">
+    <inertial>
+      <origin xyz="-0.00530874 -0.00868244 0.00225" rpy="0 0 0"/>
+      <mass value="0.00201325"/>
+      <inertia ixx="9.34482e-08" ixy="-4.54529e-08" ixz="-9.47916e-23" iyy="4.69015e-08" iyz="-9.91331e-23" izz="1.16807e-07"/>
+    </inertial>
+    <!-- Part gimbal_3 -->
+    <visual>
+      <origin xyz="-0.0031299 -0.00511895 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/gimbal.stl"/>
+      </geometry>
+      <material name="gimbal_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3 -->
+    <visual>
+      <origin xyz="-0.0113198 -0.0185136 0.00225" rpy="-1.02201 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default.stl"/>
+      </geometry>
+      <material name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_3 -->
+    <visual>
+      <origin xyz="-0.0103287 -0.0168926 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5.stl"/>
+      </geometry>
+      <material name="plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_3_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_5 -->
+    <visual>
+      <origin xyz="-4.02456e-16 2.98372e-16 0.00225" rpy="3.87146e-15 1.59895e-15 1.02201"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_5_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_1 (3)_1 (dummy link + fixed joint) -->
+  <link name="closing_1 (3)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (3)_1_frame" type="fixed">
+    <origin xyz="-0.00495568 -0.00810501 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3"/>
+    <child link="closing_1 (3)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (3)_1_z (dummy link + fixed joint) -->
+  <link name="closing_1 (3)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (3)_1_z_frame" type="fixed">
+    <origin xyz="-0.0571208 -0.0934209 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3"/>
+    <child link="closing_1 (3)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (3)_2 (dummy link + fixed joint) -->
+  <link name="closing_3 (3)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (3)_2_frame" type="fixed">
+    <origin xyz="-0.0031299 -0.00511895 -0.00275" rpy="-1.49727e-15 6.00185e-15 -0.548785"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3"/>
+    <child link="closing_3 (3)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (3)_2_z (dummy link + fixed joint) -->
+  <link name="closing_3 (3)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (3)_2_z_frame" type="fixed">
+    <origin xyz="-0.0031299 -0.00511895 0.09725" rpy="-1.49727e-15 6.00185e-15 -0.548785"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3"/>
+    <child link="closing_3 (3)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_5 to std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3 -->
+  <joint name="passive2 (3)" type="revolute">
+    <origin xyz="-0.010766 -0.000368272 -0.00462606" rpy="-0.588368 0.20522 -1.09173"/>
+    <parent link="rotule_ball_5"/>
+    <child link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3 -->
+  <link name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3">
+    <inertial>
+      <origin xyz="0.014571 -0.0133924 0.00225" rpy="0 0 0"/>
+      <mass value="0.00540375"/>
+      <inertia ixx="3.60212e-07" ixy="3.36413e-07" ixz="5.01623e-22" iyy="5.51031e-07" iyz="3.08999e-22" izz="7.69492e-07"/>
+    </inertial>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_9 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165558 -0.00735" rpy="-5.37202e-15 -2.40012e-15 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_9_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_10 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165558 0.01185" rpy="3.14159 -1.11537e-15 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_10_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_6 -->
+    <visual>
+      <origin xyz="2.77556e-17 1.38778e-17 0.00225" rpy="3.14159 3.63236e-17 -2.11105"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_6_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part distal_3 -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207565 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal.stl"/>
+      </geometry>
+      <material name="distal_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part distal_shell_3 -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207565 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal_shell.stl"/>
+      </geometry>
+      <material name="distal_shell_3_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame tip3 (dummy link + fixed joint) -->
+  <link name="tip3">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="tip3_frame" type="fixed">
+    <origin xyz="0.0272563 -0.0277177 0.00225" rpy="-1.5708 8.09289e-16 -2.15215"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3"/>
+    <child link="tip3"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3 -->
+  <link name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3">
+    <inertial>
+      <origin xyz="-0.0249171 -0.00392936 0.0052354" rpy="0 0 0"/>
+      <mass value="0.0101851"/>
+      <inertia ixx="4.96149e-07" ixy="2.45138e-08" ixz="1.19032e-10" iyy="2.52849e-06" iyz="3.03943e-10" izz="2.3577e-06"/>
+    </inertial>
+    <!-- Part proximal_shell_3 -->
+    <visual>
+      <origin xyz="-0.052 1.38778e-17 0.00515" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal_shell.stl"/>
+      </geometry>
+      <material name="proximal_shell_3_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_11 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 -0.00655" rpy="-4.52859e-15 3.52286e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_11_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal_3 -->
+    <visual>
+      <origin xyz="-0.052 1.38778e-17 0.00525" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal.stl"/>
+      </geometry>
+      <material name="proximal_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_5 -->
+    <visual>
+      <origin xyz="-0.052 6.93889e-18 0.00515" rpy="-2.38128e-15 3.73926e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_5_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_12 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 0.01685" rpy="-3.14159 3.18819e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_12_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_6 -->
+    <visual>
+      <origin xyz="0 -6.93889e-18 0.00515" rpy="-1.28626e-14 6.47257e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_6_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_3 (3)_1 (dummy link + fixed joint) -->
+  <link name="closing_3 (3)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (3)_1_frame" type="fixed">
+    <origin xyz="-0.052 6.93889e-18 -1.73472e-17" rpy="1.31802e-18 3.28086e-17 -2.89969e-17"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3"/>
+    <child link="closing_3 (3)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (3)_1_z (dummy link + fixed joint) -->
+  <link name="closing_3 (3)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (3)_1_z_frame" type="fixed">
+    <origin xyz="-0.052 6.93889e-18 0.1" rpy="1.31802e-18 3.28086e-17 -2.89969e-17"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3"/>
+    <child link="closing_3 (3)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3 to parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3 -->
+  <joint name="passive_5 (3)" type="revolute">
+    <origin xyz="-0.000346366 -0.00598999 0.00655" rpy="3.14159 5.96033e-17 0.00396328"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3"/>
+    <child link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from rotule_ball_5 to parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3 -->
+  <joint name="passive4 (3)" type="revolute">
+    <origin xyz="0.00584954 -0.0482013 -0.00541263" rpy="2.55323 0.20522 -1.09173"/>
+    <parent link="rotule_ball_5"/>
+    <child link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from ball_link_4 to rotule_ball_5 -->
+  <joint name="passive_ball8" type="ball">
+    <origin xyz="-2.6563e-18 -0.033 5.0307e-17" rpy="-1.06473e-14 -1.5708 0"/>
+    <parent link="ball_link_4"/>
+    <child link="rotule_ball_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from custom_servo_horn_3 to ball_link_4 -->
+  <joint name="passive_ball7" type="ball">
+    <origin xyz="-0.005 5.06539e-16 -0.0069" rpy="3.09235 0.606352 -0.129803"/>
+    <parent link="custom_servo_horn_3"/>
+    <child link="ball_link_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to custom_servo_horn_3 -->
+  <joint name="finger3_motor1" type="revolute">
+    <origin xyz="-0.00755 -0.0270535 0.0550493" rpy="1.5708 0.235619 -1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="custom_servo_horn_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Link rotule_ball_6 -->
+  <link name="rotule_ball_6">
+    <inertial>
+      <origin xyz="-0.005 2.0803e-17 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="-6.35081e-25" ixz="7.08918e-25" iyy="4.63584e-09" iyz="2.67191e-25" izz="1e-09"/>
+    </inertial>
+    <!-- Part rotule_ball_12 -->
+    <visual>
+      <origin xyz="-0.005 1.38778e-17 -0.0069" rpy="-9.75098e-17 1.49006e-16 -1.01485e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_12_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn_6 -->
+    <visual>
+      <origin xyz="0 2.08167e-17 -0.0025" rpy="3.14159 -1.62857e-32 -9.38165e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_6_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_12 -->
+    <visual>
+      <origin xyz="-0.005 2.08167e-17 -0.0114" rpy="3.14159 -9.78292e-17 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_12_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link_5 -->
+  <link name="ball_link_5">
+    <inertial>
+      <origin xyz="-1.37306e-13 -0.0165 -1.37299e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66105e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.66013e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_11 -->
+    <visual>
+      <origin xyz="-6.93889e-18 0 0" rpy="2.0281e-17 -5.45388e-17 -6.14068e-18"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_11_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_12 -->
+    <visual>
+      <origin xyz="-6.93889e-18 -0.033 0" rpy="-3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_12_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_6 -->
+    <visual>
+      <origin xyz="-3.46945e-18 0.00025 -5.20417e-17" rpy="-9.0223e-15 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_6_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_6 -->
+    <visual>
+      <origin xyz="-6.93889e-18 6.93889e-18 -4.85723e-17" rpy="-9.72225e-15 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_6_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball3_1 (dummy link + fixed joint) -->
+  <link name="closing_ball3_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball3_1_frame" type="fixed">
+    <origin xyz="-6.93889e-18 -0.033 0" rpy="-3.14159 -1.5708 0"/>
+    <parent link="ball_link_5"/>
+    <child link="closing_ball3_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_6 to ball_link_5 -->
+  <joint name="passive_ball9" type="ball">
+    <origin xyz="-0.005 -6.03684e-16 -0.0069" rpy="0.0589621 0.814217 0.12341"/>
+    <parent link="rotule_ball_6"/>
+    <child link="ball_link_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to rotule_ball_6 -->
+  <joint name="finger3_motor2" type="revolute">
+    <origin xyz="-0.00755 -0.0388192 0.0522246" rpy="-1.5708 -0.235619 1.5708"/>
+    <parent link="r_wrist_interface"/>
+    <child link="rotule_ball_6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Link custom_servo_horn_4 -->
+  <link name="custom_servo_horn_4">
+    <inertial>
+      <origin xyz="-0.005 1.34193e-17 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="-8.22944e-25" ixz="-1.28314e-27" iyy="4.63584e-09" iyz="-1.90625e-25" izz="1e-09"/>
+    </inertial>
+    <!-- Part rotule_ball_13 -->
+    <visual>
+      <origin xyz="-0.005 1.25767e-17 -0.0069" rpy="-4.11235e-17 4.82821e-24 1.31534e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_13_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn_7 -->
+    <visual>
+      <origin xyz="8.67362e-19 2.08167e-17 -0.0025" rpy="-3.14159 -0 -2.63045e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_7_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_13 -->
+    <visual>
+      <origin xyz="-0.005 1.25767e-17 -0.0114" rpy="-3.14159 4.11235e-17 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_13_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link_6 -->
+  <link name="ball_link_6">
+    <inertial>
+      <origin xyz="-1.37301e-13 -0.0165 -1.37289e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66024e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.6601e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_13 -->
+    <visual>
+      <origin xyz="-3.46945e-18 -0.033 1.38778e-17" rpy="-3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_13_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_14 -->
+    <visual>
+      <origin xyz="-4.33681e-19 0 6.93889e-18" rpy="2.48274e-18 -7.1381e-18 3.17817e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_14_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_7 -->
+    <visual>
+      <origin xyz="-7.37257e-18 -0.03325 1.38778e-17" rpy="-9.46736e-18 -6.17935e-17 3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_7_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_7 -->
+    <visual>
+      <origin xyz="-3.03577e-18 -0.033 1.38778e-17" rpy="-9.46736e-18 -3.42209e-17 -3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_7_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link rotule_ball_7 -->
+  <link name="rotule_ball_7">
+    <inertial>
+      <origin xyz="0.000502397 -0.0141744 -0.00657609" rpy="0 0 0"/>
+      <mass value="0.00277119"/>
+      <inertia ixx="8.0038e-07" ixy="8.94343e-08" ixz="-6.60789e-09" iyy="1.05616e-07" iyz="8.02893e-08" izz="7.62947e-07"/>
+    </inertial>
+    <!-- Part rotule_ball_14 -->
+    <visual>
+      <origin xyz="6.93889e-18 0 -4.33681e-19" rpy="2.99928 -0.0390521 0.505417"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_14_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part link_4 -->
+    <visual>
+      <origin xyz="-0.0105427 -0.00307081 -0.00890361" rpy="1.8396 1.42325 -0.799359"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/link.stl"/>
+      </geometry>
+      <material name="link_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_14 -->
+    <visual>
+      <origin xyz="0.00211128 -0.00217107 -0.0203762" rpy="-3.10214 -0.142208 -1.07097"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_14_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_15 -->
+    <visual>
+      <origin xyz="-0.000461201 0.000474262 0.00445111" rpy="0.0394506 -0.142208 -1.07097"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_15_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_15 -->
+    <visual>
+      <origin xyz="0.00165007 -0.0016968 -0.0159251" rpy="-0.142317 -0.0390521 0.505417"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_15_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball4_2 (dummy link + fixed joint) -->
+  <link name="closing_ball4_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball4_2_frame" type="fixed">
+    <origin xyz="0.00165007 -0.0016968 -0.0159251" rpy="-3.10214 -0.142208 -1.07097"/>
+    <parent link="rotule_ball_7"/>
+    <child link="closing_ball4_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4 -->
+  <link name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4">
+    <inertial>
+      <origin xyz="-0.00530871 -0.00868246 0.00225" rpy="0 0 0"/>
+      <mass value="0.00201325"/>
+      <inertia ixx="9.34485e-08" ixy="-4.54527e-08" ixz="2.07493e-23" iyy="4.69012e-08" iyz="-3.80521e-22" izz="1.16807e-07"/>
+    </inertial>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_7 -->
+    <visual>
+      <origin xyz="-6.93889e-18 5.20417e-18 0.00225" rpy="-5.3462e-14 2.79263e-16 1.02201"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_7_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_4 -->
+    <visual>
+      <origin xyz="-0.0103286 -0.0168926 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5.stl"/>
+      </geometry>
+      <material name="plain_washer_large_grade_a_m2_5__9a369f0dc77bf9c598cdf3fb468977e5_4_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part gimbal_4 -->
+    <visual>
+      <origin xyz="-0.00312989 -0.00511896 0.00225" rpy="2.11958 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/gimbal.stl"/>
+      </geometry>
+      <material name="gimbal_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4 -->
+    <visual>
+      <origin xyz="-0.0113198 -0.0185136 0.00225" rpy="-1.02201 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default.stl"/>
+      </geometry>
+      <material name="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_1 (4)_1 (dummy link + fixed joint) -->
+  <link name="closing_1 (4)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (4)_1_frame" type="fixed">
+    <origin xyz="-0.00495566 -0.00810503 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4"/>
+    <child link="closing_1 (4)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_1 (4)_1_z (dummy link + fixed joint) -->
+  <link name="closing_1 (4)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_1 (4)_1_z_frame" type="fixed">
+    <origin xyz="-0.0571205 -0.0934211 0.00225" rpy="2.11958 1.5708 0"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4"/>
+    <child link="closing_1 (4)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (4)_2 (dummy link + fixed joint) -->
+  <link name="closing_3 (4)_2">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (4)_2_frame" type="fixed">
+    <origin xyz="-0.00312989 -0.00511896 -0.00275" rpy="-1.05679e-16 -5.38244e-14 -0.548782"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4"/>
+    <child link="closing_3 (4)_2"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (4)_2_z (dummy link + fixed joint) -->
+  <link name="closing_3 (4)_2_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (4)_2_z_frame" type="fixed">
+    <origin xyz="-0.00312989 -0.00511896 0.09725" rpy="-1.05679e-16 -5.38244e-14 -0.548782"/>
+    <parent link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4"/>
+    <child link="closing_3 (4)_2_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_7 to std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4 -->
+  <joint name="passive2 (4)" type="revolute">
+    <origin xyz="-0.00510212 -0.000368231 -0.0105487" rpy="0.0394506 -0.142208 -1.07097"/>
+    <parent link="rotule_ball_7"/>
+    <child link="std00333_plast_tcb_torx_2_5x8__configuration_copy_of_default_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4 -->
+  <link name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4">
+    <inertial>
+      <origin xyz="0.0145711 -0.0133923 0.00225" rpy="0 0 0"/>
+      <mass value="0.00540375"/>
+      <inertia ixx="3.6021e-07" ixy="3.36412e-07" ixz="9.86496e-21" iyy="5.51033e-07" iyz="-8.79376e-21" izz="7.69492e-07"/>
+    </inertial>
+    <!-- Part distal_shell_4 -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207563 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal_shell.stl"/>
+      </geometry>
+      <material name="distal_shell_4_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_13 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165557 0.01185" rpy="-3.14159 4.75893e-14 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_13_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_8 -->
+    <visual>
+      <origin xyz="9.71445e-17 6.31006e-17 0.00225" rpy="3.14159 -4.77036e-14 -2.11105"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_8_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part distal_4 -->
+    <visual>
+      <origin xyz="-0.0449404 0.0207563 0.00225" rpy="-2.11105 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/distal.stl"/>
+      </geometry>
+      <material name="distal_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_14 -->
+    <visual>
+      <origin xyz="0.0194851 -0.0165557 -0.00735" rpy="2.25812e-14 4.76331e-14 1.03054"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_14_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame tip4 (dummy link + fixed joint) -->
+  <link name="tip4">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="tip4_frame" type="fixed">
+    <origin xyz="0.0272563 -0.0277177 0.00225" rpy="1.5708 4.78979e-14 0.98944"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4"/>
+    <child link="tip4"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4 -->
+  <link name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4">
+    <inertial>
+      <origin xyz="-0.0249171 -0.00392936 0.0052354" rpy="0 0 0"/>
+      <mass value="0.0101851"/>
+      <inertia ixx="4.96149e-07" ixy="2.45138e-08" ixz="1.19032e-10" iyy="2.52849e-06" iyz="3.03943e-10" izz="2.3577e-06"/>
+    </inertial>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_15 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 0.01685" rpy="3.14159 -4.96611e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_15_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_7 -->
+    <visual>
+      <origin xyz="-0.052 4.33681e-18 0.00515" rpy="-3.93868e-18 -1.00741e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_7_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_8 -->
+    <visual>
+      <origin xyz="0 -2.68882e-17 0.00515" rpy="5.40957e-15 -1.39612e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b.stl"/>
+      </geometry>
+      <material name="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_8_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal_shell_4 -->
+    <visual>
+      <origin xyz="-0.052 3.1225e-17 0.00515" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal_shell.stl"/>
+      </geometry>
+      <material name="proximal_shell_4_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <!-- Part proximal_4 -->
+    <visual>
+      <origin xyz="-0.052 8.67362e-18 0.00525" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/proximal.stl"/>
+      </geometry>
+      <material name="proximal_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <!-- Part std00447_thermoplastique_m2_5x6__configuration_default_16 -->
+    <visual>
+      <origin xyz="-0.022 -0.004 -0.00655" rpy="-5.63622e-15 -4.93017e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/std00447_thermoplastique_m2_5x6__configuration_default.stl"/>
+      </geometry>
+      <material name="std00447_thermoplastique_m2_5x6__configuration_default_16_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_3 (4)_1 (dummy link + fixed joint) -->
+  <link name="closing_3 (4)_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (4)_1_frame" type="fixed">
+    <origin xyz="-0.052 6.93889e-18 0" rpy="-2.14955e-17 -5.88071e-18 1.01016e-17"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4"/>
+    <child link="closing_3 (4)_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame closing_3 (4)_1_z (dummy link + fixed joint) -->
+  <link name="closing_3 (4)_1_z">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_3 (4)_1_z_frame" type="fixed">
+    <origin xyz="-0.052 7.80626e-18 0.1" rpy="-2.14955e-17 -5.88071e-18 1.01016e-17"/>
+    <parent link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4"/>
+    <child link="closing_3 (4)_1_z"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4 to parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4 -->
+  <joint name="passive_5 (4)" type="revolute">
+    <origin xyz="-0.00034635 -0.00599 0.00655" rpy="3.14159 4.09875e-14 0.00396308"/>
+    <parent link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4"/>
+    <child link="parallel_pin_2_x_16__da4b7ddbe9d803fe3fbc70f2e822b99b_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from rotule_ball_7 to parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4 -->
+  <joint name="passive4 (4)" type="revolute">
+    <origin xyz="0.00796529 -0.0482013 -0.000256421" rpy="-3.10214 -0.142208 -1.07097"/>
+    <parent link="rotule_ball_7"/>
+    <child link="parallel_pin_2_x_10__fee063fca0c8b40e46bbc4ffff61d999_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from ball_link_6 to rotule_ball_7 -->
+  <joint name="passive_ball11" type="ball">
+    <origin xyz="-3.46945e-18 -0.033 1.38778e-17" rpy="2.15e-16 -1.5708 0"/>
+    <parent link="ball_link_6"/>
+    <child link="rotule_ball_7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from custom_servo_horn_4 to ball_link_6 -->
+  <joint name="passive_ball10" type="ball">
+    <origin xyz="-0.005 2.72785e-16 -0.0069" rpy="3.1009 -0.107449 -0.0973495"/>
+    <parent link="custom_servo_horn_4"/>
+    <child link="ball_link_6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to custom_servo_horn_4 -->
+  <joint name="finger4_motor1" type="revolute">
+    <origin xyz="-0.000298971 0.00773341 0.03365" rpy="3.14159 1.53614e-15 1.91987"/>
+    <parent link="r_wrist_interface"/>
+    <child link="custom_servo_horn_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.57079" upper="1.5708"/>
+  </joint>
+  <!-- Link rotule_ball_8 -->
+  <link name="rotule_ball_8">
+    <inertial>
+      <origin xyz="-0.005 1.88696e-17 -0.00655938" rpy="0 0 0"/>
+      <mass value="0.000410988"/>
+      <inertia ixx="4.63584e-09" ixy="-4.00135e-25" ixz="1.5509e-24" iyy="4.63584e-09" iyz="-3.69518e-24" izz="1e-09"/>
+    </inertial>
+    <!-- Part ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_16 -->
+    <visual>
+      <origin xyz="-0.005 1.51788e-17 -0.0114" rpy="3.14159 7.46605e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed.stl"/>
+      </geometry>
+      <material name="ph_pan_head_screw_m2x0_40_x_10__2803432263e518bbd16bccbbef8784ed_16_material">
+        <color rgba="0.603922 0.647059 0.686275 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_ball_16 -->
+    <visual>
+      <origin xyz="-0.005 1.47451e-17 -0.0069" rpy="-1.83238e-15 -2.34735e-16 -8.98625e-16"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_ball.stl"/>
+      </geometry>
+      <material name="rotule_ball_16_material">
+        <color rgba="0.960784 0.835294 0.470588 1"/>
+      </material>
+    </visual>
+    <!-- Part custom_servo_horn_8 -->
+    <visual>
+      <origin xyz="0 2.1684e-17 -0.0025" rpy="3.14159 -1.97215e-31 1.4495e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/custom_servo_horn.stl"/>
+      </geometry>
+      <material name="custom_servo_horn_8_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Link ball_link_7 -->
+  <link name="ball_link_7">
+    <inertial>
+      <origin xyz="-1.37306e-13 -0.0165 -1.37298e-13" rpy="0 0 0"/>
+      <mass value="0.000463323"/>
+      <inertia ixx="6.40121e-08" ixy="6.66017e-19" ixz="-4.97671e-14" iyy="1.59688e-09" iyz="-6.66019e-19" izz="6.40121e-08"/>
+    </inertial>
+    <!-- Part rotule_lever_15 -->
+    <visual>
+      <origin xyz="-1.04083e-17 -0.033 0" rpy="-3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_15_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part rotule_lever_16 -->
+    <visual>
+      <origin xyz="-3.46945e-18 8.67362e-19 0" rpy="1.08866e-17 -3.5011e-19 -1.40957e-17"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/rotule_lever.stl"/>
+      </geometry>
+      <material name="rotule_lever_16_material">
+        <color rgba="0.196078 0.196078 0.196078 1"/>
+      </material>
+    </visual>
+    <!-- Part m2_rod_l18_8 -->
+    <visual>
+      <origin xyz="-1.73472e-17 -0.03325 0" rpy="-3.93627e-18 -1.82078e-18 3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/m2_rod_l18.stl"/>
+      </geometry>
+      <material name="m2_rod_l18_8_material">
+        <color rgba="0.811765 0.858824 0.898039 1"/>
+      </material>
+    </visual>
+    <!-- Part spacer_8 -->
+    <visual>
+      <origin xyz="-1.04083e-17 -0.033 0" rpy="-3.96473e-18 -1.5687e-17 3.14159"/>
+      <geometry>
+        <mesh filename="package://amazing_hand_description/meshes/spacer.stl"/>
+      </geometry>
+      <material name="spacer_8_material">
+        <color rgba="0.501961 0.501961 0.501961 1"/>
+      </material>
+    </visual>
+  </link>
+  <!-- Frame closing_ball4_1 (dummy link + fixed joint) -->
+  <link name="closing_ball4_1">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="closing_ball4_1_frame" type="fixed">
+    <origin xyz="-1.04083e-17 -0.033 0" rpy="-3.14159 -1.5708 0"/>
+    <parent link="ball_link_7"/>
+    <child link="closing_ball4_1"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from rotule_ball_8 to ball_link_7 -->
+  <joint name="passive_ball12" type="ball">
+    <origin xyz="-0.005 1.56125e-17 -0.0069" rpy="3.10113 0.0019099 -3.06116"/>
+    <parent link="rotule_ball_8"/>
+    <child link="ball_link_7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Joint from r_wrist_interface to rotule_ball_8 -->
+  <joint name="finger4_motor2" type="revolute">
+    <origin xyz="-0.00443741 0.0191037 0.03365" rpy="-3.14159 1.7442e-15 -1.22173"/>
+    <parent link="r_wrist_interface"/>
+    <child link="rotule_ball_8"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Additional joints_properties.xml -->
+  <default>
+    <default class="perfect_actuator">
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="0.095" frictionloss="0.001" armature="0.001" range="-1.5707963267948966 1.5707963267948966"/>
+      <position kp="10.0" kv="0.0" forcerange="-10.0 10.0"/>
+      <default class="chosen_actuator"/>
+    </default>
+    <default class="xc330m288t">
+      <!-- probably wrong, would need to re-identify -->
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="0.095" frictionloss="0.058" armature="0.0018"/>
+      <position kp="2.54" kv="0.0" forcerange="-0.8 0.8"/>
+    </default>
+    <default class="sts3215_345">
+      <!-- Standard sts3215 with 1/345 gear ratio -->
+      <!-- Confident that this is realistic (mini duck walks with these values) -->
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="0.56" frictionloss="0.068" armature="0.027"/>
+      <position kp="17.11" kv="0.0" forcerange="-3.23 3.23"/>
+    </default>
+    <default class="sts3215_147">
+      <!-- sts3215 with 1/147 gear ratio -->
+      <!-- (Estimation based on the gear ratio difference) -->
+      <geom contype="0" conaffinity="0"/>
+      <joint damping="0.1" frictionloss="0.028" armature="0.011"/>
+      <position kp="17.11" kv="0.0" forcerange="-1.35 1.35"/>
+    </default>
+  </default>
+  <!-- Additional additional.xml -->
+  <contact>
+    <!-- <exclude name="exclude0" body1="torso" body2="sts32155"/> -->
+  </contact>
+  <default>
+    <equality solref="0.002 1" solimp="0.99 0.999 0.0005 0.5 2"/>
+  </default>
+</robot>

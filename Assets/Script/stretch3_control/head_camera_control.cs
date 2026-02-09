@@ -39,7 +39,7 @@ public class HeadCameraControl : MonoBehaviour
     {
         if (cameraObject != null && panObject != null && tiltObject != null)
         {
-            Quaternion cameraRotation = cameraObject.rotation;
+            Quaternion cameraRotation = cameraObject.localRotation;
             Vector3 cameraEulerAngles = cameraRotation.eulerAngles;
 
             // Normalize camera angles

@@ -3519,6 +3519,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46398bc5d6905ad429a6d2d973afe002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &59315873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 59315874}
+  - component: {fileID: 59315876}
+  - component: {fileID: 59315875}
+  m_Layer: 0
+  m_Name: pcls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &59315874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59315873}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 962241125}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &59315875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59315873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1280a5893470f1141b02b21faeb42c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointcloudTopic: /mast3r/pointcloud_in_map
+  poseUpdateTopic: /mast3r/keyframe_pose_updates_in_map
+  pointMaterial: {fileID: 2100000, guid: e47b77f171bb0e8499efc93081ad040f, type: 2}
+  pointPixelSize: 6
+  colorTint: {r: 1, g: 1, b: 1, a: 1}
+  worldAdjust: {fileID: 962241125}
+  maxProcessPerFrame: 250000
+  showStats: 1
+  verbose: 0
+--- !u!114 &59315876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59315873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedRosVersion: 1
+  SecondsTimeout: 10
+  Serializer: 0
+  protocol: 0
+  RosBridgeServerUrl: ws://192.168.0.212:9090
 --- !u!1 &60390704
 GameObject:
   m_ObjectHideFlags: 0
@@ -13900,6 +13971,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GeometryType: 3
+--- !u!1 &242861686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 242861687}
+  m_Layer: 0
+  m_Name: env_recon_origin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &242861687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242861686}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7069555, y: -0.014627957, z: 0.7069555, w: 0.01462795}
+  m_LocalPosition: {x: -1.324, y: 1.48, z: 0.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 844918107}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &243233701
 GameObject:
   m_ObjectHideFlags: 8
@@ -28404,6 +28507,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!1 &450338620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 450338621}
+  m_Layer: 0
+  m_Name: test_sift
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &450338621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450338620}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7069555, y: -0.014627957, z: 0.7069555, w: 0.01462795}
+  m_LocalPosition: {x: -1.324, y: 1.48, z: 0.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1433068575}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &450983345
 GameObject:
   m_ObjectHideFlags: 0
@@ -33417,7 +33552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &524589744
 Transform:
   m_ObjectHideFlags: 0
@@ -33470,7 +33605,7 @@ MonoBehaviour:
   width_start: 0
   width_end: 848
   depth_limit: 3000
-  downsample_factor: 3
+  downsample_factor: 1
   point_size_factor: 1
   move_too_far_points: 0
 --- !u!114 &524589747
@@ -33522,7 +33657,7 @@ MonoBehaviour:
   SecondsTimeout: 10
   Serializer: 0
   protocol: 0
-  RosBridgeServerUrl: ws://192.168.0.60:9090
+  RosBridgeServerUrl: ws://192.168.0.212:9090
 --- !u!1 &524993698
 GameObject:
   m_ObjectHideFlags: 8
@@ -53346,6 +53481,85 @@ Transform:
   - {fileID: 206791313}
   m_Father: {fileID: 1983008920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &844918106
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844918107}
+  - component: {fileID: 844918109}
+  - component: {fileID: 844918108}
+  m_Layer: 0
+  m_Name: pcls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &844918107
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844918106}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 242861687}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &844918108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844918106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bd1a78d36caf64c915119663be192a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topicName: /mast3r/pointcloud_in_map
+  voxelSize: 0.01
+  memoryBudgetMB: 6144
+  eviction: 1
+  maxProcessPerFrame: 250000
+  autoAnchor: 1
+  anchored: 0
+  useWorldAdjust: 1
+  worldAdjust: {fileID: 242861687}
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationEuler: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  pointMaterial: {fileID: 2100000, guid: 3d54741b8ef36bb46b32bfa04128581f, type: 2}
+  pointPixelSize: 6
+  colorTint: {r: 1, g: 1, b: 1, a: 1}
+  showStats: 1
+  verbose: 0
+--- !u!114 &844918109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844918106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedRosVersion: 1
+  SecondsTimeout: 10
+  Serializer: 0
+  protocol: 0
+  RosBridgeServerUrl: ws://192.168.0.3:9091
 --- !u!1 &845177516
 GameObject:
   m_ObjectHideFlags: 8
@@ -60518,6 +60732,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!1 &962241124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 962241125}
+  m_Layer: 0
+  m_Name: env_recon_dev
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &962241125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962241124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7069555, y: -0.014627957, z: 0.7069555, w: 0.01462795}
+  m_LocalPosition: {x: -1.324, y: 1.48, z: 0.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 59315874}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &964699474
 GameObject:
   m_ObjectHideFlags: 0
@@ -90765,6 +91011,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9090ae501ff9cd459bec5271d40249c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1433068574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1433068575}
+  - component: {fileID: 1433068577}
+  - component: {fileID: 1433068576}
+  m_Layer: 0
+  m_Name: pcls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1433068575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433068574}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 450338621}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1433068576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433068574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9221189b79f883e40aa21e789bdd195a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topicName: /mast3r/pointcloud_in_map
+  voxelSize: 0.02
+  memoryBudgetMB: 6144
+  eviction: 1
+  maxProcessPerFrame: 250000
+  enableICP: 1
+  icpMaxIterations: 50
+  icpMaxDistance: 0.5
+  icpDownsampleVoxel: 0.05
+  discardOnFailure: 0
+  showAlignmentStats: 1
+  autoAnchor: 1
+  anchored: 0
+  useWorldAdjust: 1
+  worldAdjust: {fileID: 450338621}
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationEuler: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  pointMaterial: {fileID: 2100000, guid: 3d54741b8ef36bb46b32bfa04128581f, type: 2}
+  pointPixelSize: 6
+  colorTint: {r: 1, g: 1, b: 1, a: 1}
+  showStats: 1
+  verbose: 0
+--- !u!114 &1433068577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433068574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedRosVersion: 1
+  SecondsTimeout: 10
+  Serializer: 0
+  protocol: 0
+  RosBridgeServerUrl: ws://192.168.0.212:9090
 --- !u!1 &1433421543
 GameObject:
   m_ObjectHideFlags: 0
@@ -100854,7 +101185,7 @@ MonoBehaviour:
   width_start: 0
   width_end: 640
   depth_limit: 6500
-  downsample_factor: 3
+  downsample_factor: 1
   point_size_factor: 1
   move_too_far_points: 0
 --- !u!114 &1610491356
@@ -103700,7 +104031,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657863298}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -103708,7 +104039,7 @@ Transform:
   - {fileID: 1668138867}
   - {fileID: 1155717035}
   m_Father: {fileID: 2001617488}
-  m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1657863300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135087,3 +135418,6 @@ SceneRoots:
   - {fileID: 436202174}
   - {fileID: 1764906993}
   - {fileID: 1956205196}
+  - {fileID: 242861687}
+  - {fileID: 962241125}
+  - {fileID: 450338621}
