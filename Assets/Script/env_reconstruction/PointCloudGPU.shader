@@ -1,4 +1,4 @@
-Shader "Custom/PointCloudGPU"
+Shader "Hidden/PointCloudGPU"
 {
     Properties { _PointSize ("Point Size (px)", Float) = 3.0  _Tint ("Tint", Color) = (1,1,1,1) }
     SubShader {
@@ -6,15 +6,17 @@ Shader "Custom/PointCloudGPU"
         Pass {
             ZWrite On  Cull Off
             CGPROGRAM
-            #pragma target 4.0
+            #pragma target 4.5
             #pragma vertex   vert
             #pragma geometry geom
             #pragma fragment frag
             #include "UnityCG.cginc"
 
             StructuredBuffer<float3> _Positions;
-            StructuredBuffer<uint>   _Colors;   // 0xRRGGBB
-            float4x4 _WorldAdjust;             // << �s�W�G�@�ɷL�կx�}
+            StructuredBuffer<uint>   _Colors;   
+            StructuredBuffer<uint>   _KeyframeIndices;
+            StructuredBuffer<float4x4> _KeyframePoses;
+            float4x4 _WorldAdjust;            
             float    _PointSize; fixed4 _Tint;
 
             struct v2g { float4 clipPos : SV_POSITION; fixed4 col : COLOR; };
@@ -30,10 +32,17 @@ Shader "Custom/PointCloudGPU"
             v2g vert(uint id : SV_VertexID)
             {
                 v2g o;
-                float3 p_map = _Positions[id];
-                // map -> world (�i��) -> clip
-                float4 p_world = mul(_WorldAdjust, float4(p_map,1));
+                float3 p_local = _Positions[id];
+                uint kf_id = _KeyframeIndices[id];
+                float4x4 T_kf = _KeyframePoses[kf_id];
+
+                // local -> keyframe_world 
+                float4 p_world = mul(T_kf, float4(p_local, 1));
+                
+                // keyframe_world -> adjusted_world -> clip
+                p_world = mul(_WorldAdjust, p_world); 
                 o.clipPos = mul(UNITY_MATRIX_VP, p_world);
+                
                 o.col = DecodeColor(_Colors[id]) * _Tint;
                 return o;
             }
