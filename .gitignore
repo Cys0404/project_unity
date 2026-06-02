@@ -79,3 +79,16 @@ UserSettings/EditorUserSettings.asset
 
 Assets/Packages*
 Assets/*.meta
+
+Assets/Office space with robotic setup.ply
+Assets/Samples/model.ply
+Assets/Samples/model.ply.meta
+Assets/point_cloud 1.ply
+Assets/point_cloud.ply
+
+# Large point cloud / mesh data
+*.ply
+*.pcd
+*.bag
+*.db3
+*.mcap
