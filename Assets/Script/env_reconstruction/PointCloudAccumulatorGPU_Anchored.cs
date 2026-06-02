@@ -25,7 +25,7 @@ using RosSharp.RosBridgeClient.MessageTypes.Geometry;
 public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
 {
     [Header("ROS Topics")]
-    public string pointcloudTopic = "/mast3r/frame_pointcloud";
+    public string pointcloudTopic = "/mast3r/pointcloud_in_map"; // [HYBRID FRAMEWORK] Listen to the global map directly
     public string poseArrayTopic = "/mast3r/keyframe_pose_updates";
 
     [Header("Voxel & Memory (Per Keyframe)")]
@@ -39,14 +39,18 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
     public int maxGlobalPoints = 5_000_000;
 
     [Header("Sensor -> Map (Anchor)")]
-    [Tooltip("Automatically anchor the origin based on the first keyframe position.")]
-    public bool autoAnchor = true;
+    [Tooltip("Auto-anchor is disabled for Hybrid framework: pointclouds are already global.")]
+    public bool autoAnchor = false;
     public bool anchored = false;
 
     [Header("World Adjust (Draw-Time)")]
     [Tooltip("Apply an additional overall transform matrix to the entire point cloud.")]
     public bool useWorldAdjust = true;
     public Transform worldAdjust;
+
+    [Header("PGO Settings")]
+    [Tooltip("OFF = Old system behaviour (identity pose, display global points as-is).\nON  = Enable delta PGO correction (T_init captured from first PoseArray, ΔT applied on updates).")]
+    public bool enablePGO = false;
 
     [Header("Optional Sensor Offsets (pre-anchor)")]
     public Vector3 positionOffset = Vector3.zero;
@@ -67,7 +71,13 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
     private string subIdPoseArray;
 
     // ---- Batches ----
-    private struct Batch { public uint kfId; public Vector3[] pos; public uint[] col; public int count; }
+    private struct Batch
+    {
+        public uint kfId;
+        public Vector3[] pos;
+        public uint[] col;
+        public int count;
+    }
     private readonly ConcurrentQueue<Batch> batchQueue = new ConcurrentQueue<Batch>();
 
     private readonly ConcurrentQueue<PoseArray> poseQueue = new ConcurrentQueue<PoseArray>();
@@ -77,14 +87,18 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
     {
         public uint id;
         public int bufferIndex;
-        public List<Vector3> localPositions = new List<Vector3>();
+        public List<Vector3> globalPositions = new List<Vector3>(); // [HYBRID] Already in global coordinates
         public List<uint> colors = new List<uint>();
         public HashSet<Vector3Int> voxelSet = new HashSet<Vector3Int>();
+        public Matrix4x4 T_init = Matrix4x4.identity; // [HYBRID] Set from FIRST PoseArray update (same space as T_wc_opt)
+        public bool T_initSet = false;                 // [HYBRID] True after first PoseArray arrival
     }
 
     private Dictionary<uint, KeyframeBlock> keyframeBlocks = new Dictionary<uint, KeyframeBlock>();
     private LinkedList<uint> kfLruList = new LinkedList<uint>(); // Track eviction order
     private Dictionary<uint, int> kfToBufferIdx = new Dictionary<uint, int>();
+    // [HYBRID] Cache for PoseArray that arrives before the point cloud batch
+    private Dictionary<uint, Matrix4x4> pendingPoses = new Dictionary<uint, Matrix4x4>();
     private Queue<int> freeBufferIndices = new Queue<int>();
 
     // SLAM Dynamic Poses
@@ -108,6 +122,9 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
 
     private Matrix4x4 sensorXform = Matrix4x4.identity;
     private Matrix4x4 T_anchor_inv = Matrix4x4.identity;
+
+    // Used to provide a temporary pose for pointclouds arriving before their initial pose update
+    private Matrix4x4 lastKnownPose = Matrix4x4.identity;
 
     void Awake()
     {
@@ -199,12 +216,15 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
             int num = (int)(msg.width * msg.height);
             if (num <= 0 || msg.data == null || msg.data.Length == 0) return;
 
-            // Extract Keyframe ID from header.frame_id (e.g., "kf_123")
+            // Extract Keyframe ID from header.frame_id
+            // Format from pc2_to_map: "kf_42|tx:...|ty:...|tz:...|qx:...|qy:...|qz:...|qw:..."
+            // We only need kf_id here. T_init is taken from the FIRST PoseArray update (same coord system).
             uint kfId = 0;
             string fid = msg.header.frame_id;
-            if (fid.StartsWith("kf_"))
+            string[] parts = fid.Split('|');
+            if (parts.Length > 0 && parts[0].StartsWith("kf_"))
             {
-                uint.TryParse(fid.Substring(3), out kfId);
+                uint.TryParse(parts[0].Substring(3), out kfId);
             }
 
             int step = (int)msg.point_step;
@@ -220,12 +240,13 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
                 float z = BitConverter.ToSingle(msg.data, off + 8);
                 uint rgb = BitConverter.ToUInt32(msg.data, off + 12);
 
-                // --------------------------------------------------------------------------------
-                // ROS/OpenCV Camera Optical (Right-Handed): X Right, Y Down, Z Forward
-                // Unity (Left-Handed): X Right, Y Up, Z Forward
-                // Conversion Rule: (x_u, y_u, z_u) = (x_r, -y_r, z_r)
-                // --------------------------------------------------------------------------------
-                tmpPositions[valid] = new Vector3(x, -y, z); // Modified for Left-Handed
+                // -----------------------------------------------------------------------
+                // Python: T_WC.act(X_canon) [world space] + Z=-Z [Unity Z-forward]
+                // This matches the old system convention. After pc2_to_map's static TF,
+                // the points are in a Unity-compatible world space.
+                // OLD Unity (which worked) used (x, y, z) directly — do the same here.
+                // -----------------------------------------------------------------------
+                tmpPositions[valid] = new Vector3(x, y, z);
                 tmpColors[valid] = (rgb & 0x00FFFFFFu);
                 valid++;
             }
@@ -257,6 +278,18 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
             keyframeBlocks[b.kfId] = block;
             kfToBufferIdx[b.kfId] = bIdx;
             kfLruList.AddLast(b.kfId);
+
+            // [HYBRID] Points are in global space → identity means "display as-is".
+            // If a PoseArray already arrived for this kf (pendingPoses), set T_init now.
+            if (pendingPoses.TryGetValue(b.kfId, out Matrix4x4 cachedPose))
+            {
+                block.T_init = cachedPose;
+                block.T_initSet = true;
+                pendingPoses.Remove(b.kfId);
+                Debug.Log($"[PC-Sync] kf_{b.kfId}: T_init set from pending pose.");
+            }
+            keyframePosesArray[bIdx] = Matrix4x4.identity;
+            posesDirty = true;
         }
         else
         {
@@ -281,7 +314,7 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
             if (block.voxelSet.Contains(key)) continue;
 
             block.voxelSet.Add(key);
-            block.localPositions.Add(p);
+            block.globalPositions.Add(p); // [HYBRID] Storing global positions
             block.colors.Add(b.col[i]);
             newlyAdded++;
         }
@@ -304,7 +337,7 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
 
         if (keyframeBlocks.TryGetValue(oldest, out KeyframeBlock block))
         {
-            totalPointsCount -= block.localPositions.Count;
+            totalPointsCount -= block.globalPositions.Count;
             freeBufferIndices.Enqueue(block.bufferIndex);
             kfToBufferIdx.Remove(oldest);
             keyframeBlocks.Remove(oldest);
@@ -325,12 +358,12 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
         foreach (var kvp in keyframeBlocks)
         {
             var block = kvp.Value;
-            int count = block.localPositions.Count;
+            int count = block.globalPositions.Count;
             uint bIdx = (uint)block.bufferIndex;
 
             if (flatPositions.Count + count > maxGlobalPoints) break;
 
-            flatPositions.AddRange(block.localPositions);
+            flatPositions.AddRange(block.globalPositions);
             flatColors.AddRange(block.colors);
 
             for (int i = 0; i < count; i++)
@@ -340,51 +373,95 @@ public class PointCloudAccumulatorGPU_Anchored : MonoBehaviour
         }
         gpuTopologyDirty = true;
     }
-
     private void ProcessPoseArray(PoseArray msg)
     {
-        // msg.header.frame_id encodes kfIds and scales -> "kf_ids:0,1,5|scales:1.0,1.0,1.0"
+        // [PGO GATE FIXED] Do NOT return early here! We must always record T_init
+        // for new keyframes perfectly, even if PGO is toggled off, so that if the user
+        // toggles PGO ON later, the baseline T_init is mathematically correct.
+
+        // msg.header.frame_id: "kf_ids:0,1,5|scales:1.0,1.0,1.0"
+        // Python (publish_keyframe_pose_updates) already applied ROS→Unity conversion:
+        //   position: (tx, -ty, tz),  quaternion: (-qx, qy, -qz, qw)
+        // Use values as-is. Do NOT re-convert here.
         string frameIdInfo = msg.header.frame_id;
         string[] parts = frameIdInfo.Split('|');
         if (parts.Length < 2) return;
 
         string kfStr = parts[0].Replace("kf_ids:", "");
         string sStr = parts[1].Replace("scales:", "");
-
         string[] kfTokens = kfStr.Split(',');
         string[] sTokens = sStr.Split(',');
 
         for (int i = 0; i < msg.poses.Length; i++)
         {
             if (i >= kfTokens.Length || i >= sTokens.Length) break;
+            if (!uint.TryParse(kfTokens[i], out uint kId)) continue;
 
-            if (uint.TryParse(kfTokens[i], out uint kId))
+            float s = 1.0f;
+            float.TryParse(sTokens[i], System.Globalization.NumberStyles.Float,
+                           System.Globalization.CultureInfo.InvariantCulture, out s);
+
+            var rosPose = msg.poses[i];
+            // -------------------------------------------------------------------------
+            // -------------------------------------------------------------------------
+            // 還原：使用者表示原來的旋轉（Python 提供的值）是正確的，
+            // 之前的反轉補償反而導致世界顛倒。
+            // 因此我們直接使用收到的數值。
+            float final_qx = (float)rosPose.orientation.x;
+            float final_qy = (float)rosPose.orientation.y;
+            float final_qz = (float)rosPose.orientation.z;
+            float final_qw = (float)rosPose.orientation.w;
+
+            float px_orig = (float)rosPose.position.x;
+            float py_orig = (float)rosPose.position.y;
+            float pz_orig = (float)rosPose.position.z;
+
+            Vector3 pos = new Vector3(px_orig, py_orig, pz_orig);
+            Quaternion rot = new Quaternion(final_qx, final_qy, final_qz, final_qw);
+            // -------------------------------------------------------------------------
+            // -------------------------------------------------------------------------
+            // [CRITICAL SCALE RESTORATION]
+            // We previously removed 's' to prevent points from shrinking, but MASt3R uses Sim3
+            // where Translation 't' is tied to Scale 's'. Removing 's' but using 't' warped the
+            // pivot-center, tearing the map apart during PGO updates! We MUST preserve it in T_wc_opt.
+            // (If scale shrinking point clouds is an issue later, we must fix it by scaling deltaT properly)
+            Matrix4x4 T_wc_opt = Matrix4x4.TRS(pos, rot, new Vector3(s, s, s));
+
+            if (!kfToBufferIdx.TryGetValue(kId, out int bIdx))
             {
-                if (!kfToBufferIdx.TryGetValue(kId, out int bIdx)) continue;
+                // Point cloud not yet received — cache pose so AppendBatch can pick it up.
+                pendingPoses[kId] = T_wc_opt;
+                continue;
+            }
 
-                float s = 1.0f;
-                float.TryParse(sTokens[i], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out s);
+            if (!keyframeBlocks.TryGetValue(kId, out KeyframeBlock block)) continue;
 
-                var rosPose = msg.poses[i];
-                Vector3 pos = new Vector3((float)rosPose.position.x, (float)rosPose.position.y, (float)rosPose.position.z);
-                Quaternion rot = new Quaternion((float)rosPose.orientation.x, (float)rosPose.orientation.y, (float)rosPose.orientation.z, (float)rosPose.orientation.w);
-
-                Matrix4x4 T_kf = Matrix4x4.TRS(pos, rot, new Vector3(s, s, s));
-
-                // Auto anchor logic: Make the very first received pose the Map Origin
-                if (!anchored && autoAnchor)
+            if (!block.T_initSet)
+            {
+                // [HYBRID] FIRST pose arrival for this keyframe → save as T_init baseline.
+                // Both T_init and all future T_wc_opt come from MASt3R (same coordinate space).
+                // ΔT will therefore be a pure PGO correction, geometrically meaningful.
+                block.T_init = T_wc_opt;
+                block.T_initSet = true;
+                keyframePosesArray[bIdx] = Matrix4x4.identity; // no delta yet
+                Debug.Log($"[PC-Sync] kf_{kId}: T_init captured from first PoseArray.");
+            }
+            else
+            {
+                // Subsequent updates → compute ΔT = T_opt · T_init⁻¹
+                // Points are in global space; ΔT slides them to PGO-optimized positions.
+                if (enablePGO)
                 {
-                    T_anchor_inv = T_kf.inverse;
-                    anchored = true;
+                    Matrix4x4 deltaT = T_wc_opt * block.T_init.inverse;
+                    // [HYBRID FIX] 移除多餘的 * sensorXform
+                    // 點雲本身已經是 global，我們只需要把「PGO誤差(ΔT)」加上去就好。
+                    // 否則相機的初始偏轉角度 (sensorXform) 會被旋轉兩次！
+                    keyframePosesArray[bIdx] = deltaT;
                 }
-
-                if (autoAnchor && anchored)
+                else
                 {
-                    T_kf = T_anchor_inv * T_kf;
+                    keyframePosesArray[bIdx] = Matrix4x4.identity;
                 }
-
-                // Apply Sensor Xform
-                keyframePosesArray[bIdx] = T_kf * sensorXform;
             }
         }
         posesDirty = true;

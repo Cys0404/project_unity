@@ -1942,7 +1942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6195976995561960490, guid: 5789f150aaab6c5498640f8ff2c7461f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6195976995561960490, guid: 5789f150aaab6c5498640f8ff2c7461f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -3350,7 +3350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2634835340333772434, guid: 8c3782bd9e073534fae5b59247dd4043, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2634835340333772434, guid: 8c3782bd9e073534fae5b59247dd4043, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -7960,7 +7960,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3580570609167447670, guid: 6040d0932c4bdb342b74f1c196a993c0, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3580570609167447670, guid: 6040d0932c4bdb342b74f1c196a993c0, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -14072,15 +14072,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pinchToggle: {fileID: 190571112}
-  statusText: {fileID: 641416142}
-  glowImage: {fileID: 0}
   onText: Right ON
   offText: Right OFF
   onColor: {r: 0.2, g: 1, b: 0.4, a: 1}
   offColor: {r: 1, g: 0.25, b: 0.25, a: 1}
-  glowMinAlpha: 0.15
-  glowMaxAlpha: 0.55
-  glowSpeed: 2.5
+  statusText: {fileID: 641416142}
 --- !u!1 &191465506
 GameObject:
   m_ObjectHideFlags: 0
@@ -15763,7 +15759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2634835340333772434, guid: 8c3782bd9e073534fae5b59247dd4043, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2634835340333772434, guid: 8c3782bd9e073534fae5b59247dd4043, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -16383,15 +16379,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pinchToggle: {fileID: 227272148}
-  statusText: {fileID: 1498144677}
-  glowImage: {fileID: 0}
   onText: Left ON
   offText: Left OFF
   onColor: {r: 0.2, g: 1, b: 0.4, a: 1}
   offColor: {r: 1, g: 0.25, b: 0.25, a: 1}
-  glowMinAlpha: 0.15
-  glowMaxAlpha: 0.55
-  glowSpeed: 2.5
+  statusText: {fileID: 1498144677}
 --- !u!1 &227668176
 GameObject:
   m_ObjectHideFlags: 8
@@ -17974,7 +17966,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3759849711980901467, guid: 4989c33552e73ab4d8d4190aaed04204, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3759849711980901467, guid: 4989c33552e73ab4d8d4190aaed04204, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -21962,7 +21954,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1221782608542922478, guid: 7f39af99cd179c64b918613dac7117cd, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1221782608542922478, guid: 7f39af99cd179c64b918613dac7117cd, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -42022,7 +42014,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1221782608542922478, guid: 7f39af99cd179c64b918613dac7117cd, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1221782608542922478, guid: 7f39af99cd179c64b918613dac7117cd, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -100095,7 +100087,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1685313918083104104, guid: 575a82897e7016e40bc137264639162f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1685313918083104104, guid: 575a82897e7016e40bc137264639162f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -104877,7 +104869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6195976995561960490, guid: 5789f150aaab6c5498640f8ff2c7461f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6195976995561960490, guid: 5789f150aaab6c5498640f8ff2c7461f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -135039,7 +135031,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1685313918083104104, guid: 575a82897e7016e40bc137264639162f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1685313918083104104, guid: 575a82897e7016e40bc137264639162f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -146068,7 +146060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3580570609167447670, guid: 6040d0932c4bdb342b74f1c196a993c0, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3580570609167447670, guid: 6040d0932c4bdb342b74f1c196a993c0, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -150505,7 +150497,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3759849711980901467, guid: 4989c33552e73ab4d8d4190aaed04204, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3759849711980901467, guid: 4989c33552e73ab4d8d4190aaed04204, type: 3}
       propertyPath: m_Materials.Array.data[0]

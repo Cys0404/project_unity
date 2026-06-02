@@ -34,19 +34,6 @@ namespace RosSharp.RosBridgeClient
         [Tooltip("Speed of rotation interpolation (set to 0 for immediate rotation)")]
         private float rotationSpeed = 0f;
 
-        // -------------------- Added: ROS publish control & connector --------------------
-        [Header("ROS Publish Control")]
-        [Tooltip("Enable/disable publishing to ROS. Turn OFF for offline testing to keep Console quiet.")]
-        public bool enableRosPublish = true;
-
-        [Tooltip("If true, publish only when RosConnector has a valid RosSocket (connected).")]
-        public bool publishOnlyWhenConnected = true;
-
-        [Header("ROS Connector Reference (optional)")]
-        [Tooltip("Assign RosConnector here (recommended). If not assigned, script will try FindObjectOfType at Start().")]
-        public RosConnector rosConnector;
-        // -------------------------------------------------------------------------------
-
         // Internal variable for smoothed distance
         private float smoothedDistance = 0f;
 
@@ -55,21 +42,8 @@ namespace RosSharp.RosBridgeClient
 
         protected override void Start()
         {
-            // -------------------- Added: initialize message BEFORE base.Start() --------------------
-            // Why: base.Start() depends on ROS connection setup; if ROS bridge isn't running,
-            // base.Start() may fail/throw and prevent InitializeMessage() from being called.
-            // We want message to ALWAYS exist so Unity local control never crashes.
-            InitializeMessage();
-            // --------------------------------------------------------------------------------------
-
             base.Start();
-
-            // -------------------- Added: get RosConnector (optional) --------------------
-            // If you didn't drag RosConnector in Inspector, we try to find it once at Start().
-            // (We intentionally do NOT call FindObjectOfType every frame in Update.)
-            if (rosConnector == null)
-                rosConnector = FindObjectOfType<RosConnector>();
-            // ---------------------------------------------------------------------------
+            InitializeMessage();
 
             // Initialize the smoothed distance to the first measurement if available
             if (indexTip != null && thumbTip != null)
@@ -86,15 +60,6 @@ namespace RosSharp.RosBridgeClient
                 Debug.LogWarning("IndexTip or ThumbTip transform is not assigned.");
                 return;
             }
-
-            // -------------------- Added: check gripper finger references too --------------------
-            // Your original code assumes these exist. If not assigned, it would NullRef earlier.
-            if (gripperFingerRight == null || gripperFingerLeft == null)
-            {
-                Debug.LogWarning("Gripper finger transforms are not assigned.");
-                return;
-            }
-            // ---------------------------------------------------------------------------
 
             // Measure the current distance between the index tip and thumb tip
             float measuredDistance = Vector3.Distance(indexTip.position, thumbTip.position);
@@ -135,35 +100,10 @@ namespace RosSharp.RosBridgeClient
                 gripperFingerLeft.localRotation = Quaternion.Euler(-targetAngle - 60, rightEuler.y, leftEuler.z);
             }
 
-            // -------------------- Added: ROS publish gating (quiet when offline) --------------------
-            // If you are testing without rosbridge/bridge running, Publish() may spam errors.
-            // These flags let you keep local Unity control working while skipping ROS publish.
-            if (!enableRosPublish)
-                return;
-
-            if (publishOnlyWhenConnected)
-            {
-                // If no connector or no socket, we assume "not connected" and skip silently.
-                if (rosConnector == null || rosConnector.RosSocket == null)
-                    return;
-            }
-            // --------------------------------------------------------------------------------------
-
             // Set the ROS message data to the target angle and publish it.
             // (Make sure the receiving ROS node interprets this value correctly.)
-            // -------------------- Added: safety re-init in case lifecycle got weird --------------------
-            if (message == null)
-                InitializeMessage();
-            // --------------------------------------------------------------------------------------
-
             message.data = targetAngle;
-
-            // -------------------- Added: extra safety before Publish --------------------
-            // If publishOnlyWhenConnected is false, Publish might still throw if socket is null,
-            // so we guard it anyway.
-            if (!publishOnlyWhenConnected || (rosConnector != null && rosConnector.RosSocket != null))
-                Publish(message);
-            // --------------------------------------------------------------------------
+            Publish(message);
         }
 
         private void InitializeMessage()

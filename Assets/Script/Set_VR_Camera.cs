@@ -6,11 +6,10 @@ public class Set_VR_Camera : MonoBehaviour
 {
     void Start()
     {
-        this.transform.position = new Vector3(0.0f, 0.9f, -0.05f);
     }
 
     void Update()
     {
-
+        this.transform.position = new Vector3(1.6f, 0.3f, 0f);
     }
 }
