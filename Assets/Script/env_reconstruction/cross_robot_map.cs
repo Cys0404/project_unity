@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Vector3 = UnityEngine.Vector3;
@@ -10,6 +11,7 @@ using Matrix4x4 = UnityEngine.Matrix4x4;
 
 using RosSharp.RosBridgeClient;
 using RosSharp.RosBridgeClient.MessageTypes.Sensor;
+using StringMsg = RosSharp.RosBridgeClient.MessageTypes.Std.String;
 
 // ==============================================================================
 //  PointCloudAccumulatorGPU_Anchored_IBGR
@@ -41,7 +43,7 @@ public class cross_robot_map : MonoBehaviour
 
     [Header("Memory (Full Map)")]
     [Tooltip("Maximum points across the ENTIRE map (safety limit).")]
-    public int maxGlobalPoints = 5_000_000;
+    public int maxGlobalPoints = 30_000_000;
 
     [Header("World Adjust (Draw-Time)")]
     [Tooltip("Apply an additional overall transform matrix to the entire point cloud.")]
@@ -64,11 +66,21 @@ public class cross_robot_map : MonoBehaviour
     [Tooltip("Also swap once the back buffer has at least this many points, even if the chunk ratio was not reached. This keeps Unity responsive when rosbridge drops many chunks.")]
     public int minFullMapSwapPoints = 0;
 
+    [Tooltip("Maximum number of map revisions Unity will keep in RAM while waiting for enough chunks.")]
+    public int maxTrackedChunkRevisions = 2;
+
+    [Tooltip("Drop an incomplete revision bucket after this many seconds and publish a missing-chunk report.")]
+    public float chunkAssemblyTimeoutSec = 20f;
+
+    [Tooltip("Unity publishes JSON reports here when a revision swaps or is evicted, so ROS can log missing chunks.")]
+    public string chunkAckTopic = "/multi_robot/unity_map_chunk_ack";
+
     // ---- ROS ----
     private RosConnector rosConnector;
     private string subIdFullMap;
-    private readonly System.Collections.Generic.List<string> subIdIncremental = new System.Collections.Generic.List<string>();
+    private readonly List<string> subIdIncremental = new List<string>();
     private string subIdLegacyPointCloud;
+    private string ackPubId;
 
     // ---- Batches (IPC Decoding to Main Thread) ----
     private struct Batch
@@ -153,16 +165,32 @@ public class cross_robot_map : MonoBehaviour
             subIdLegacyPointCloud = rosConnector.RosSocket.Subscribe<PointCloud2>(legacyPointcloudTopic, ReceiveLegacyPointCloud);
             Debug.Log($"[IBGR] Subscribed legacy pointcloud topic: {legacyPointcloudTopic}");
         }
+
+        if (!string.IsNullOrWhiteSpace(chunkAckTopic))
+        {
+            ackPubId = rosConnector.RosSocket.Advertise<StringMsg>(chunkAckTopic);
+            Debug.Log($"[IBGR] Publishing chunk ACK reports on {chunkAckTopic}");
+        }
     }
 
     // ---- Chunked Full Map State ----
-    // 同一個 full-map revision 收到足夠比例的 chunk 後 swap，避免 rosbridge 掉包讓畫面卡死。
-    private int _chunkExpectedTotal = 0;
-    private int _chunkReceivedSoFar = 0;
+    // Per-revision buckets tolerate out-of-order chunks instead of dropping tail chunks before chunk 1 arrives.
+    private class ChunkAssembly
+    {
+        public int localRevision;
+        public int sourceRevision;
+        public int totalChunks;
+        public Batch[] chunks;
+        public bool[] received;
+        public int receivedCount;
+        public int pointCount;
+        public float firstSeenTime;
+        public float lastSeenTime;
+    }
+
+    private readonly Dictionary<int, ChunkAssembly> _chunkAssemblies = new Dictionary<int, ChunkAssembly>();
     private int _chunkAssemblyRevision = 0;
-    private int _chunkSourceRevision = -1;
     private int _lastSwappedSourceRevision = -1;
-    private bool[] _chunkReceivedFlags = null;
 
     /// <summary>
     /// 解析 frame_id 中的分塊資訊。
@@ -225,6 +253,7 @@ public class cross_robot_map : MonoBehaviour
         var (revision, chunkN, totalChunks) = ParseChunkFrameId(frameId);
         if (chunkN > 0 && totalChunks > 0)
         {
+            PublishChunkCallbackAck(revision, chunkN, totalChunks, msg, "full_map");
             Debug.Log($"[IBGR] RX Full Map Chunk | rev={revision} chunk={chunkN}/{totalChunks} | raw={frameId}");
             DecodeChunk(msg, revision, chunkN, totalChunks);
             return;
@@ -251,6 +280,7 @@ public class cross_robot_map : MonoBehaviour
         var (revision, chunkN, totalChunks) = ParseChunkFrameId(frameId);
         if (chunkN > 0 && totalChunks > 0)
         {
+            PublishChunkCallbackAck(revision, chunkN, totalChunks, msg, "legacy");
             Debug.Log($"[IBGR] RX Legacy Chunk | rev={revision} chunk={chunkN}/{totalChunks} | raw={frameId}");
             DecodeChunk(msg, revision, chunkN, totalChunks);
             return;
@@ -352,7 +382,8 @@ public class cross_robot_map : MonoBehaviour
             if (b.isChunk)
             {
                 // =====================================================
-                // PGO Chunked Full Map：同一組 chunk 收到足夠比例後 Atomic Swap。
+                // PGO Chunked Full Map：按 source revision 暫存 chunks。
+                // 亂序 chunk 不再直接丟掉；收到足夠比例後才組 back buffer 並 Atomic Swap。
                 // =====================================================
                 if (b.totalChunks <= 0 || b.chunkN <= 0 || b.chunkN > b.totalChunks)
                 {
@@ -360,91 +391,44 @@ public class cross_robot_map : MonoBehaviour
                     continue;
                 }
 
-                bool hasActiveAssembly = _chunkExpectedTotal > 0 && _chunkReceivedFlags != null;
-
-                if (b.revision > 0 && b.revision <= _lastSwappedSourceRevision)
+                int sourceRevision = b.revision;
+                if (sourceRevision > 0 && sourceRevision <= _lastSwappedSourceRevision)
                 {
-                    Debug.Log($"[IBGR] Dropping old/tail chunk rev={b.revision} chunk={b.chunkN}/{b.totalChunks}; lastSwappedRev={_lastSwappedSourceRevision}.");
+                    Debug.Log($"[IBGR] Dropping old/tail chunk rev={sourceRevision} chunk={b.chunkN}/{b.totalChunks}; lastSwappedRev={_lastSwappedSourceRevision}.");
                     continue;
                 }
 
-                if (!hasActiveAssembly)
+                ChunkAssembly assembly = GetOrCreateChunkAssembly(sourceRevision, b.totalChunks);
+                if (assembly.totalChunks != b.totalChunks)
                 {
-                    if (!b.isFirstChunk)
-                    {
-                        Debug.LogWarning($"[IBGR] Dropping chunk {b.chunkN}/{b.totalChunks} for rev={b.revision}: waiting for chunk 1 to start a clean assembly.");
-                        continue;
-                    }
-                    StartChunkAssembly(b);
-                }
-                else if (b.revision > 0 && b.revision != _chunkSourceRevision)
-                {
-                    if (b.revision < _chunkSourceRevision)
-                    {
-                        Debug.Log($"[IBGR] Dropping stale chunk rev={b.revision} chunk={b.chunkN}/{b.totalChunks}; activeRev={_chunkSourceRevision}.");
-                        continue;
-                    }
-
-                    if (!b.isFirstChunk)
-                    {
-                        Debug.LogWarning($"[IBGR] Dropping future chunk rev={b.revision} chunk={b.chunkN}/{b.totalChunks}: activeRev={_chunkSourceRevision}, waiting for chunk 1 before switching revisions.");
-                        continue;
-                    }
-                    StartChunkAssembly(b);
-                }
-                else if (b.isFirstChunk && _chunkReceivedSoFar > 0)
-                {
-                    Debug.LogWarning($"[IBGR] Duplicate chunk 1 for activeRev={_chunkSourceRevision}; ignoring restart attempt.");
+                    Debug.LogWarning($"[IBGR] Dropping full-map chunk rev={sourceRevision} chunk={b.chunkN}/{b.totalChunks}: expected total {assembly.totalChunks}.");
                     continue;
                 }
 
-                if (b.totalChunks != _chunkExpectedTotal)
+                if (assembly.received[b.chunkN])
                 {
-                    Debug.LogWarning($"[IBGR] Dropping full-map chunk {b.chunkN}/{b.totalChunks}: expected total {_chunkExpectedTotal}.");
+                    Debug.LogWarning($"[IBGR] Duplicate full-map chunk rev={sourceRevision} chunk={b.chunkN}/{b.totalChunks} ignored for localRev={assembly.localRevision}.");
                     continue;
                 }
 
-                if (_chunkReceivedFlags[b.chunkN])
-                {
-                    Debug.LogWarning($"[IBGR] Duplicate full-map chunk {b.chunkN}/{b.totalChunks} ignored for rev={_chunkAssemblyRevision}.");
-                    continue;
-                }
+                assembly.chunks[b.chunkN] = b;
+                assembly.received[b.chunkN] = true;
+                assembly.receivedCount++;
+                assembly.pointCount += b.count;
+                assembly.lastSeenTime = Time.time;
+                PublishChunkReceivedAck(assembly, b);
 
-                int backCount = bufferCounts[backBufferIdx];
-                int insertCount = Mathf.Min(b.count, maxGlobalPoints - backCount);
-                if (insertCount > 0)
-                {
-                    posBuffers[backBufferIdx].SetData(b.pos, 0, backCount, insertCount);
-                    colBuffers[backBufferIdx].SetData(b.col, 0, backCount, insertCount);
-                    bufferCounts[backBufferIdx] = backCount + insertCount;
-                }
-
-                _chunkReceivedFlags[b.chunkN] = true;
-                _chunkReceivedSoFar++;
-
-                int chunksRequiredForSwap = RequiredChunksForSwap(_chunkExpectedTotal);
-                bool enoughChunks = _chunkReceivedSoFar >= chunksRequiredForSwap;
-                bool enoughPoints = minFullMapSwapPoints > 0 && bufferCounts[backBufferIdx] >= minFullMapSwapPoints;
+                int chunksRequiredForSwap = RequiredChunksForSwap(assembly.totalChunks);
+                bool enoughChunks = assembly.receivedCount >= chunksRequiredForSwap;
+                bool enoughPoints = minFullMapSwapPoints > 0 && assembly.pointCount >= minFullMapSwapPoints;
                 if (!enoughChunks && !enoughPoints)
                 {
-                    Debug.Log($"[IBGR] PGO Chunk progress rev={_chunkAssemblyRevision}: {_chunkReceivedSoFar}/{_chunkExpectedTotal} chunks, need {chunksRequiredForSwap}, backBuffer={bufferCounts[backBufferIdx]:N0} pts, minSwapPts={minFullMapSwapPoints:N0}.");
+                    Debug.Log($"[IBGR] PGO Chunk progress localRev={assembly.localRevision} sourceRev={assembly.sourceRevision}: {assembly.receivedCount}/{assembly.totalChunks} chunks, need {chunksRequiredForSwap}, staged={assembly.pointCount:N0} pts, minSwapPts={minFullMapSwapPoints:N0}.");
+                    PruneChunkAssemblies();
                     continue;
                 }
 
-                // chunk 比例達標 → 原子性翻轉！畫面只閃一幀
-                int temp = activeBufferIdx;
-                activeBufferIdx = backBufferIdx;
-                backBufferIdx = temp;
-
-                // 清空舊的 Active（現在變成 Back），等下次 PGO 使用
-                bufferCounts[backBufferIdx] = 0;
-                Debug.Log($"[IBGR] ⚡ DB Swap localRev={_chunkAssemblyRevision} sourceRev={_chunkSourceRevision}! Displaying {bufferCounts[activeBufferIdx]:N0} PGO-aligned pts from {_chunkReceivedSoFar}/{_chunkExpectedTotal} chunks (threshold={chunksRequiredForSwap}, ratio={fullMapChunkSwapRatio:0.00}, minSwapPts={minFullMapSwapPoints:N0}).");
-
-                _lastSwappedSourceRevision = _chunkSourceRevision;
-                _chunkExpectedTotal = 0;
-                _chunkReceivedSoFar = 0;
-                _chunkSourceRevision = -1;
-                _chunkReceivedFlags = null;
+                SwapChunkAssembly(assembly, enoughPoints ? "min_points" : "ratio");
             }
             else if (b.isFullMap)
             {
@@ -483,19 +467,176 @@ public class cross_robot_map : MonoBehaviour
             }
         }
 
+        PruneChunkAssemblies();
         DrawActiveBuffer();
     }
 
-    private void StartChunkAssembly(Batch b)
+    private ChunkAssembly GetOrCreateChunkAssembly(int sourceRevision, int totalChunks)
     {
+        if (_chunkAssemblies.TryGetValue(sourceRevision, out ChunkAssembly existing))
+        {
+            return existing;
+        }
+
         _chunkAssemblyRevision++;
-        _chunkSourceRevision = b.revision;
-        _chunkExpectedTotal = b.totalChunks;
-        _chunkReceivedSoFar = 0;
-        _chunkReceivedFlags = new bool[b.totalChunks + 1];
+        ChunkAssembly assembly = new ChunkAssembly
+        {
+            localRevision = _chunkAssemblyRevision,
+            sourceRevision = sourceRevision,
+            totalChunks = totalChunks,
+            chunks = new Batch[totalChunks + 1],
+            received = new bool[totalChunks + 1],
+            receivedCount = 0,
+            pointCount = 0,
+            firstSeenTime = Time.time,
+            lastSeenTime = Time.time
+        };
+        _chunkAssemblies[sourceRevision] = assembly;
+        int requiredChunks = RequiredChunksForSwap(totalChunks);
+        Debug.Log($"[IBGR] ▶ PGO Chunk BUCKET localRev={assembly.localRevision} sourceRev={sourceRevision}: expecting {totalChunks} chunks, swap after {requiredChunks}; trackedBuckets={_chunkAssemblies.Count}.");
+        PruneChunkAssemblies();
+        return assembly;
+    }
+
+    private void SwapChunkAssembly(ChunkAssembly assembly, string reason)
+    {
         bufferCounts[backBufferIdx] = 0;
-        int requiredChunks = RequiredChunksForSwap(_chunkExpectedTotal);
-        Debug.Log($"[IBGR] ▶ PGO Chunk START localRev={_chunkAssemblyRevision} sourceRev={_chunkSourceRevision}: expecting {b.totalChunks} chunks, swap after {requiredChunks}; firstSeenChunk={b.chunkN}; active stays visible.");
+        for (int chunkN = 1; chunkN <= assembly.totalChunks; chunkN++)
+        {
+            if (!assembly.received[chunkN]) continue;
+            Batch chunk = assembly.chunks[chunkN];
+            int backCount = bufferCounts[backBufferIdx];
+            int insertCount = Mathf.Min(chunk.count, maxGlobalPoints - backCount);
+            if (insertCount <= 0) break;
+            posBuffers[backBufferIdx].SetData(chunk.pos, 0, backCount, insertCount);
+            colBuffers[backBufferIdx].SetData(chunk.col, 0, backCount, insertCount);
+            bufferCounts[backBufferIdx] = backCount + insertCount;
+        }
+
+        int temp = activeBufferIdx;
+        activeBufferIdx = backBufferIdx;
+        backBufferIdx = temp;
+        bufferCounts[backBufferIdx] = 0;
+
+        int requiredChunks = RequiredChunksForSwap(assembly.totalChunks);
+        Debug.Log($"[IBGR] ⚡ DB Swap localRev={assembly.localRevision} sourceRev={assembly.sourceRevision}! Displaying {bufferCounts[activeBufferIdx]:N0} PGO-aligned pts from {assembly.receivedCount}/{assembly.totalChunks} chunks (threshold={requiredChunks}, ratio={fullMapChunkSwapRatio:0.00}, reason={reason}).");
+        PublishChunkAck(assembly, "swapped_" + reason);
+
+        if (assembly.sourceRevision > 0)
+        {
+            _lastSwappedSourceRevision = Mathf.Max(_lastSwappedSourceRevision, assembly.sourceRevision);
+        }
+        _chunkAssemblies.Remove(assembly.sourceRevision);
+        PruneSwappedOrOldAssemblies();
+    }
+
+    private void PruneChunkAssemblies()
+    {
+        if (chunkAssemblyTimeoutSec > 0f)
+        {
+            List<int> timedOut = new List<int>();
+            foreach (var item in _chunkAssemblies)
+            {
+                if (Time.time - item.Value.lastSeenTime > chunkAssemblyTimeoutSec)
+                {
+                    timedOut.Add(item.Key);
+                }
+            }
+            foreach (int key in timedOut)
+            {
+                ChunkAssembly assembly = _chunkAssemblies[key];
+                PublishChunkAck(assembly, "timeout");
+                Debug.LogWarning($"[IBGR] Evicting timed-out chunk bucket localRev={assembly.localRevision} sourceRev={assembly.sourceRevision}: {assembly.receivedCount}/{assembly.totalChunks} chunks.");
+                _chunkAssemblies.Remove(key);
+            }
+        }
+
+        int limit = Mathf.Max(1, maxTrackedChunkRevisions);
+        while (_chunkAssemblies.Count > limit)
+        {
+            int oldestKey = 0;
+            float oldestTime = float.MaxValue;
+            bool found = false;
+            foreach (var item in _chunkAssemblies)
+            {
+                if (!found || item.Value.firstSeenTime < oldestTime)
+                {
+                    oldestKey = item.Key;
+                    oldestTime = item.Value.firstSeenTime;
+                    found = true;
+                }
+            }
+            if (!found) break;
+            ChunkAssembly assembly = _chunkAssemblies[oldestKey];
+            PublishChunkAck(assembly, "evicted_capacity");
+            Debug.LogWarning($"[IBGR] Evicting chunk bucket due to capacity localRev={assembly.localRevision} sourceRev={assembly.sourceRevision}: {assembly.receivedCount}/{assembly.totalChunks} chunks, limit={limit}.");
+            _chunkAssemblies.Remove(oldestKey);
+        }
+    }
+
+    private void PruneSwappedOrOldAssemblies()
+    {
+        if (_lastSwappedSourceRevision <= 0) return;
+        List<int> oldKeys = new List<int>();
+        foreach (var item in _chunkAssemblies)
+        {
+            if (item.Key > 0 && item.Key <= _lastSwappedSourceRevision)
+            {
+                oldKeys.Add(item.Key);
+            }
+        }
+        foreach (int key in oldKeys)
+        {
+            ChunkAssembly assembly = _chunkAssemblies[key];
+            PublishChunkAck(assembly, "evicted_after_newer_swap");
+            _chunkAssemblies.Remove(key);
+        }
+    }
+
+    private void PublishChunkAck(ChunkAssembly assembly, string status)
+    {
+        if (string.IsNullOrWhiteSpace(ackPubId) || rosConnector == null || rosConnector.RosSocket == null) return;
+
+        string missing = MissingChunksJsonArray(assembly);
+        int requiredChunks = RequiredChunksForSwap(assembly.totalChunks);
+        string json = $"{{\"schema\":\"unity_map_chunk_ack_v1\",\"status\":\"{status}\",\"revision\":{assembly.sourceRevision},\"local_revision\":{assembly.localRevision},\"received_chunks\":{assembly.receivedCount},\"total_chunks\":{assembly.totalChunks},\"required_chunks\":{requiredChunks},\"point_count\":{assembly.pointCount},\"missing_chunks\":{missing}}}";
+        PublishAckJson(json);
+    }
+
+    private void PublishChunkCallbackAck(int revision, int chunkN, int totalChunks, PointCloud2 msg, string source)
+    {
+        if (string.IsNullOrWhiteSpace(ackPubId) || rosConnector == null || rosConnector.RosSocket == null) return;
+
+        int pointCount = (int)(msg.width * msg.height);
+        string frameId = msg.header.frame_id ?? string.Empty;
+        string json = $"{{\"schema\":\"unity_map_chunk_ack_v1\",\"status\":\"chunk_callback\",\"revision\":{revision},\"chunk_n\":{chunkN},\"total_chunks\":{totalChunks},\"chunk_points\":{pointCount},\"source\":\"{source}\",\"frame_id\":\"{frameId}\"}}";
+        PublishAckJson(json);
+    }
+
+    private void PublishChunkReceivedAck(ChunkAssembly assembly, Batch chunk)
+    {
+        if (string.IsNullOrWhiteSpace(ackPubId) || rosConnector == null || rosConnector.RosSocket == null) return;
+
+        int requiredChunks = RequiredChunksForSwap(assembly.totalChunks);
+        string json = $"{{\"schema\":\"unity_map_chunk_ack_v1\",\"status\":\"chunk_received\",\"revision\":{assembly.sourceRevision},\"local_revision\":{assembly.localRevision},\"chunk_n\":{chunk.chunkN},\"total_chunks\":{assembly.totalChunks},\"received_chunks\":{assembly.receivedCount},\"required_chunks\":{requiredChunks},\"chunk_points\":{chunk.count},\"point_count\":{assembly.pointCount}}}";
+        PublishAckJson(json);
+    }
+
+    private void PublishAckJson(string json)
+    {
+        StringMsg msg = new StringMsg();
+        msg.data = json;
+        rosConnector.RosSocket.Publish(ackPubId, msg);
+    }
+
+    private string MissingChunksJsonArray(ChunkAssembly assembly)
+    {
+        List<string> missing = new List<string>();
+        for (int i = 1; i <= assembly.totalChunks; i++)
+        {
+            if (!assembly.received[i]) missing.Add(i.ToString());
+        }
+        return "[" + string.Join(",", missing.ToArray()) + "]";
     }
 
     private int RequiredChunksForSwap(int totalChunks)
@@ -554,6 +695,7 @@ public class cross_robot_map : MonoBehaviour
                 if (subId != null) rosConnector.RosSocket.Unsubscribe(subId);
             }
             if (subIdLegacyPointCloud != null) rosConnector.RosSocket.Unsubscribe(subIdLegacyPointCloud);
+            if (ackPubId != null) rosConnector.RosSocket.Unadvertise(ackPubId);
         }
 
         for (int i = 0; i < 2; i++)
