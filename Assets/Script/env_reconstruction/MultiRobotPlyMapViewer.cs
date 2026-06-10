@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -47,6 +48,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     public Material pointMaterial;
     public float pointPixelSize = 3f;
     [ColorUsage(false, true)] public Color colorTint = Color.white;
+    public List<Camera> extraRenderCameras = new List<Camera>();
 
     [Header("Editor View")]
     public bool showInSceneView = true;
@@ -54,6 +56,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     [Header("Debug")]
     public bool showStats = true;
     public bool verboseLogs = true;
+    public bool logRenderCameras = false;
 
     private struct PlyUpdate
     {
@@ -98,6 +101,9 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     private int downloadedUpdates = 0;
     private int droppedUpdates = 0;
     private int failedUpdates = 0;
+    private int lastExtraRenderFrame = -1;
+    private Camera lastExtraRenderCamera = null;
+    private float lastRenderCameraLogTime = -999f;
 
     void Awake()
     {
@@ -126,17 +132,23 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         dummyPoseBuffer.SetData(new Matrix4x4[] { Matrix4x4.identity });
     }
 
-#if UNITY_EDITOR
     void OnEnable()
     {
+        Camera.onPostRender += OnCameraPostRender;
+#if UNITY_EDITOR
         SceneView.duringSceneGui += OnSceneViewGui;
+#endif
     }
 
     void OnDisable()
     {
+        Camera.onPostRender -= OnCameraPostRender;
+#if UNITY_EDITOR
         SceneView.duringSceneGui -= OnSceneViewGui;
+#endif
     }
 
+#if UNITY_EDITOR
     private void OnSceneViewGui(SceneView sceneView)
     {
         if (!showInSceneView || !Application.isPlaying) return;
@@ -441,7 +453,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
 
         if (verboseLogs)
         {
-            float mb = bytes.Length / (1024f * 1024f);
+            float mb = downloadedBytes / (1024f * 1024f);
             Debug.Log($"[PlyMapViewer] Displayed version={parsed.version} points={parsed.count:N0}/{parsed.sourcePointCount:N0} size={mb:F1}MB download={lastDownloadSec:F3}s parse={lastParseSec:F3}s");
         }
     }
@@ -581,7 +593,54 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
 
     void OnRenderObject()
     {
+        Camera currentCamera = Camera.current;
+        if (IsExtraRenderCamera(currentCamera))
+        {
+            MaybeLogRenderCamera("OnRenderObject skipped extra", currentCamera);
+            return;
+        }
+
+        MaybeLogRenderCamera("OnRenderObject", currentCamera);
         DrawActiveBuffer();
+    }
+
+    private void OnCameraPostRender(Camera cam)
+    {
+        if (cam == null) return;
+        if (!IsExtraRenderCamera(cam)) return;
+
+        if (lastExtraRenderFrame == Time.frameCount && lastExtraRenderCamera == cam)
+        {
+            return;
+        }
+
+        lastExtraRenderFrame = Time.frameCount;
+        lastExtraRenderCamera = cam;
+        MaybeLogRenderCamera("OnCameraPostRender", cam);
+        DrawActiveBuffer();
+    }
+
+    private bool IsExtraRenderCamera(Camera cam)
+    {
+        if (cam == null) return false;
+        if (extraRenderCameras == null || extraRenderCameras.Count == 0) return false;
+
+        for (int i = 0; i < extraRenderCameras.Count; i++)
+        {
+            if (extraRenderCameras[i] == cam) return true;
+        }
+        return false;
+    }
+
+    private void MaybeLogRenderCamera(string source, Camera cam)
+    {
+        if (!logRenderCameras) return;
+        float now = Time.unscaledTime;
+        if (now - lastRenderCameraLogTime < 1f) return;
+
+        string cameraName = cam != null ? cam.name : "<null>";
+        Debug.Log($"[PlyMapViewer] {source} camera={cameraName} frame={Time.frameCount}");
+        lastRenderCameraLogTime = now;
     }
 
     private void DrawActiveBuffer()
