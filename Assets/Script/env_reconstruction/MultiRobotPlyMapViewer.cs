@@ -16,6 +16,7 @@ using Matrix4x4 = UnityEngine.Matrix4x4;
 using Transform = UnityEngine.Transform;
 
 using RosSharp.RosBridgeClient;
+using RosSharp.RosBridgeClient.MessageTypes.Sensor;
 using StringMsg = RosSharp.RosBridgeClient.MessageTypes.Std.String;
 
 [RequireComponent(typeof(RosConnector))]
@@ -23,6 +24,23 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
 {
     [Header("ROS Notification")]
     public string plyUpdateTopic = "/multi_robot/optimized_map_ply_updates";
+    public string robotAlignmentsTopic = "/multi_robot/robot_alignments";
+
+    [Header("Cross-Robot Presentation Gate")]
+    public bool waitForCrossRobotAlignment = true;
+    public int minAlignedRobots = 2;
+    public int minUsedConstraints = 1;
+    public bool clearLocalPreviewOnGlobalReady = true;
+
+    [Header("Local Preview Before Global Merge")]
+    public bool enableLocalPreviewWhileWaiting = true;
+    public string[] localPreviewPointcloudTopics = new string[]
+    {
+        "/robot1/mast3r/frame_pointcloud",
+        "/robot2/mast3r/frame_pointcloud"
+    };
+    public int maxLocalPreviewPoints = 2_000_000;
+    public int localPreviewPointStride = 1;
 
     [Header("Download")]
     public bool preferLatestUrl = false;
@@ -43,10 +61,13 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     [Header("World Adjust")]
     public bool useWorldAdjust = true;
     public Transform worldAdjust;
+    public bool useLocalPreviewWorldAdjust = false;
+    public Transform localPreviewWorldAdjust;
 
     [Header("Rendering")]
     public Material pointMaterial;
     public float pointPixelSize = 3f;
+    public float drawBoundsSize = 10000f;
     [ColorUsage(false, true)] public Color colorTint = Color.white;
     public List<Camera> extraRenderCameras = new List<Camera>();
 
@@ -77,15 +98,31 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         public int sourcePointCount;
     }
 
+    private struct PreviewBatch
+    {
+        public Vector3[] positions;
+        public uint[] colors;
+        public int count;
+        public string topic;
+        public string frameId;
+    }
+
     private RosConnector rosConnector;
     private string subId;
+    private string alignmentSubId;
+    private readonly List<string> localPreviewSubIds = new List<string>();
     private readonly ConcurrentQueue<PlyUpdate> updateQueue = new ConcurrentQueue<PlyUpdate>();
+    private readonly ConcurrentQueue<PreviewBatch> localPreviewQueue = new ConcurrentQueue<PreviewBatch>();
 
     private ComputeBuffer[] posBuffers = new ComputeBuffer[2];
     private ComputeBuffer[] colBuffers = new ComputeBuffer[2];
     private int[] bufferCounts = new int[2];
     private int activeBufferIdx = 0;
     private int backBufferIdx = 1;
+
+    private ComputeBuffer localPreviewPosBuffer;
+    private ComputeBuffer localPreviewColBuffer;
+    private int localPreviewPointCount = 0;
 
     private ComputeBuffer dummyIdxBuffer;
     private ComputeBuffer dummyPoseBuffer;
@@ -101,6 +138,11 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     private int downloadedUpdates = 0;
     private int droppedUpdates = 0;
     private int failedUpdates = 0;
+    private bool crossRobotAlignmentReady = false;
+    private int latestAlignedRobotCount = 0;
+    private int latestUsedConstraintCount = 0;
+    private int localPreviewMessages = 0;
+    private int localPreviewDroppedMessages = 0;
     private int lastExtraRenderFrame = -1;
     private Camera lastExtraRenderCamera = null;
     private float lastRenderCameraLogTime = -999f;
@@ -124,8 +166,12 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
             bufferCounts[i] = 0;
         }
 
-        dummyIdxBuffer = new ComputeBuffer(maxGlobalPoints, 4);
-        uint[] zeroIndices = new uint[maxGlobalPoints];
+        localPreviewPosBuffer = new ComputeBuffer(maxLocalPreviewPoints, 12);
+        localPreviewColBuffer = new ComputeBuffer(maxLocalPreviewPoints, 4);
+
+        int dummyCapacity = Mathf.Max(maxGlobalPoints, maxLocalPreviewPoints);
+        dummyIdxBuffer = new ComputeBuffer(dummyCapacity, 4);
+        uint[] zeroIndices = new uint[dummyCapacity];
         dummyIdxBuffer.SetData(zeroIndices);
 
         dummyPoseBuffer = new ComputeBuffer(1, 64);
@@ -153,7 +199,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     {
         if (!showInSceneView || !Application.isPlaying) return;
         if (Event.current == null || Event.current.type != EventType.Repaint) return;
-        if (bufferCounts[activeBufferIdx] <= 0) return;
+        if (!HasDrawablePoints()) return;
 
         DrawActiveBuffer();
         sceneView.Repaint();
@@ -168,6 +214,10 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     private IEnumerator Initialize()
     {
         Debug.Log("[PlyMapViewer] Initialize");
+        if (waitForCrossRobotAlignment)
+        {
+            Debug.Log($"[PlyMapViewer] Waiting for cross-robot alignment: robots>={minAlignedRobots}, used_constraints>={minUsedConstraints}. Local preview will be shown while waiting.");
+        }
 
         if (loadManifestOnStart && !string.IsNullOrWhiteSpace(manifestUrl))
         {
@@ -199,6 +249,24 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         }
         subId = rosConnector.RosSocket.Subscribe<StringMsg>(plyUpdateTopic, ReceivePlyUpdate);
         Debug.Log($"[PlyMapViewer] Subscribed to {plyUpdateTopic}");
+
+        if (!string.IsNullOrWhiteSpace(robotAlignmentsTopic))
+        {
+            alignmentSubId = rosConnector.RosSocket.Subscribe<StringMsg>(robotAlignmentsTopic, ReceiveRobotAlignments);
+            Debug.Log($"[PlyMapViewer] Subscribed to {robotAlignmentsTopic}");
+        }
+
+        if (enableLocalPreviewWhileWaiting && localPreviewPointcloudTopics != null)
+        {
+            foreach (string topic in localPreviewPointcloudTopics)
+            {
+                if (string.IsNullOrWhiteSpace(topic)) continue;
+                string topicCopy = topic;
+                string localSubId = rosConnector.RosSocket.Subscribe<PointCloud2>(topicCopy, msg => ReceiveLocalPreviewPointCloud(topicCopy, msg));
+                localPreviewSubIds.Add(localSubId);
+                Debug.Log($"[PlyMapViewer] Subscribed local preview pointcloud {topicCopy}");
+            }
+        }
     }
 
     private IEnumerator PollManifestLoop()
@@ -247,6 +315,92 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         isPollingManifest = false;
     }
 
+    private void ReceiveRobotAlignments(StringMsg msg)
+    {
+        int usedConstraints = ExtractInt(msg.data, "used_constraint_count", 0);
+        int alignedRobots = CountRobotAlignments(msg.data);
+        latestUsedConstraintCount = usedConstraints;
+        latestAlignedRobotCount = alignedRobots;
+
+        if (!crossRobotAlignmentReady && usedConstraints >= minUsedConstraints && alignedRobots >= minAlignedRobots)
+        {
+            crossRobotAlignmentReady = true;
+            Debug.Log($"[PlyMapViewer] Cross-robot alignment ready: robots={alignedRobots}, used_constraints={usedConstraints}. Swapping from local preview to global PLY map.");
+            if (clearLocalPreviewOnGlobalReady)
+            {
+                localPreviewPointCount = 0;
+            }
+        }
+    }
+
+    private void ReceiveLocalPreviewPointCloud(string topic, PointCloud2 msg)
+    {
+        if (!enableLocalPreviewWhileWaiting) return;
+        if (ShouldShowGlobalMap()) return;
+
+        int totalPoints = (int)(msg.width * msg.height);
+        if (totalPoints <= 0) return;
+
+        int stride = Mathf.Max(1, localPreviewPointStride);
+        int decodeCount = Mathf.Min((totalPoints + stride - 1) / stride, maxLocalPreviewPoints);
+        Vector3[] positions = new Vector3[decodeCount];
+        uint[] colors = new uint[decodeCount];
+
+        int xOff = -1, yOff = -1, zOff = -1, rgbOff = -1;
+        foreach (var field in msg.fields)
+        {
+            if (field.name == "x") xOff = (int)field.offset;
+            else if (field.name == "y") yOff = (int)field.offset;
+            else if (field.name == "z") zOff = (int)field.offset;
+            else if (field.name == "rgb" || field.name == "rgba") rgbOff = (int)field.offset;
+        }
+        if (xOff < 0 || yOff < 0 || zOff < 0)
+        {
+            localPreviewDroppedMessages++;
+            Debug.LogWarning($"[PlyMapViewer] Drop local preview cloud without xyz fields topic={topic} frame={msg.header.frame_id}");
+            return;
+        }
+
+        int step = (int)msg.point_step;
+        byte[] data = msg.data;
+        int written = 0;
+        for (int i = 0; i < totalPoints && written < decodeCount; i += stride)
+        {
+            int b = i * step;
+            if (b + step > data.Length) break;
+            float x = BitConverter.ToSingle(data, b + xOff);
+            float y = BitConverter.ToSingle(data, b + yOff);
+            float z = BitConverter.ToSingle(data, b + zOff);
+            if (float.IsNaN(x) || float.IsInfinity(x) || float.IsNaN(y) || float.IsInfinity(y) || float.IsNaN(z) || float.IsInfinity(z)) continue;
+
+            positions[written] = new Vector3(x, y, z);
+            colors[written] = (rgbOff >= 0 && b + rgbOff + 4 <= data.Length)
+                ? BitConverter.ToUInt32(data, b + rgbOff)
+                : 0xFFFFFFFF;
+            written++;
+        }
+
+        if (written <= 0)
+        {
+            localPreviewDroppedMessages++;
+            return;
+        }
+        if (written != decodeCount)
+        {
+            Array.Resize(ref positions, written);
+            Array.Resize(ref colors, written);
+        }
+
+        localPreviewQueue.Enqueue(new PreviewBatch
+        {
+            positions = positions,
+            colors = colors,
+            count = written,
+            topic = topic,
+            frameId = msg.header.frame_id,
+        });
+    }
+
     private void ReceivePlyUpdate(StringMsg msg)
     {
         if (!TryParseUpdate(msg.data, out PlyUpdate update))
@@ -266,6 +420,8 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
 
     void Update()
     {
+        ProcessLocalPreviewQueue();
+
         PlyUpdate? newestQueued = null;
         while (updateQueue.TryDequeue(out PlyUpdate update))
         {
@@ -312,6 +468,33 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
             {
                 StartCoroutine(DownloadParseAndSwap(next));
             }
+        }
+    }
+
+    private void ProcessLocalPreviewQueue()
+    {
+        if (!enableLocalPreviewWhileWaiting) return;
+        if (ShouldShowGlobalMap())
+        {
+            if (clearLocalPreviewOnGlobalReady) localPreviewPointCount = 0;
+            while (localPreviewQueue.TryDequeue(out PreviewBatch discardedBatch)) { }
+            return;
+        }
+
+        while (localPreviewQueue.TryDequeue(out PreviewBatch batch))
+        {
+            int free = maxLocalPreviewPoints - localPreviewPointCount;
+            if (free <= 0)
+            {
+                localPreviewDroppedMessages++;
+                continue;
+            }
+
+            int insertCount = Mathf.Min(batch.count, free);
+            localPreviewPosBuffer.SetData(batch.positions, 0, localPreviewPointCount, insertCount);
+            localPreviewColBuffer.SetData(batch.colors, 0, localPreviewPointCount, insertCount);
+            localPreviewPointCount += insertCount;
+            localPreviewMessages++;
         }
     }
 
@@ -552,6 +735,14 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         return int.Parse(m.Groups[1].Value);
     }
 
+    private static int CountRobotAlignments(string json)
+    {
+        Match section = Regex.Match(json, "\\\"robot_alignments\\\"\\s*:\\s*\\{(?<body>.*?)\\}\\s*(,|$)");
+        if (!section.Success) return 0;
+        MatchCollection keys = Regex.Matches(section.Groups["body"].Value, "\\\"([^\\\"]+)\\\"\\s*:");
+        return keys.Count;
+    }
+
     private bool TryParseUpdate(string json, out PlyUpdate update)
     {
         update = new PlyUpdate();
@@ -646,27 +837,73 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     private void DrawActiveBuffer()
     {
         if (pointMaterial == null) return;
-        int activeCount = bufferCounts[activeBufferIdx];
-        if (activeCount == 0) return;
 
-        Matrix4x4 adjust = (useWorldAdjust && worldAdjust != null)
+        if (ShouldShowGlobalMap())
+        {
+            DrawPointBuffer(posBuffers[activeBufferIdx], colBuffers[activeBufferIdx], bufferCounts[activeBufferIdx], GetGlobalWorldAdjust());
+            return;
+        }
+
+        if (enableLocalPreviewWhileWaiting)
+        {
+            DrawPointBuffer(localPreviewPosBuffer, localPreviewColBuffer, localPreviewPointCount, GetLocalPreviewWorldAdjust());
+        }
+    }
+
+    private bool ShouldShowGlobalMap()
+    {
+        return !waitForCrossRobotAlignment || crossRobotAlignmentReady;
+    }
+
+    private bool HasDrawablePoints()
+    {
+        if (ShouldShowGlobalMap()) return bufferCounts[activeBufferIdx] > 0;
+        return enableLocalPreviewWhileWaiting && localPreviewPointCount > 0;
+    }
+
+    private Matrix4x4 GetGlobalWorldAdjust()
+    {
+        return (useWorldAdjust && worldAdjust != null)
             ? worldAdjust.localToWorldMatrix
             : Matrix4x4.identity;
+    }
+
+    private Matrix4x4 GetLocalPreviewWorldAdjust()
+    {
+        return (useLocalPreviewWorldAdjust && localPreviewWorldAdjust != null)
+            ? localPreviewWorldAdjust.localToWorldMatrix
+            : GetGlobalWorldAdjust();
+    }
+
+    private void DrawPointBuffer(ComputeBuffer positions, ComputeBuffer colors, int pointCount, Matrix4x4 adjust)
+    {
+        if (pointMaterial == null || positions == null || colors == null) return;
+        if (pointCount <= 0) return;
 
         pointMaterial.SetMatrix("_WorldAdjust", adjust);
         pointMaterial.SetFloat("_PointSize", pointPixelSize);
         pointMaterial.SetColor("_Tint", colorTint);
-        pointMaterial.SetBuffer("_Positions", posBuffers[activeBufferIdx]);
-        pointMaterial.SetBuffer("_Colors", colBuffers[activeBufferIdx]);
+        pointMaterial.SetBuffer("_Positions", positions);
+        pointMaterial.SetBuffer("_Colors", colors);
         pointMaterial.SetBuffer("_KeyframeIndices", dummyIdxBuffer);
         pointMaterial.SetBuffer("_KeyframePoses", dummyPoseBuffer);
 
         Graphics.DrawProcedural(
             pointMaterial,
-            new Bounds(Vector3.zero, Vector3.one * 10000f),
+            GetDrawBounds(adjust),
             MeshTopology.Points,
-            activeCount,
+            pointCount,
             1);
+    }
+
+    private Bounds GetDrawBounds(Matrix4x4 adjust)
+    {
+        float size = Mathf.Max(1f, drawBoundsSize);
+        Vector3 center = adjust.MultiplyPoint3x4(Vector3.zero);
+        float scale = Mathf.Max(
+            adjust.GetColumn(0).magnitude,
+            Mathf.Max(adjust.GetColumn(1).magnitude, adjust.GetColumn(2).magnitude));
+        return new Bounds(center, Vector3.one * size * Mathf.Max(1f, scale));
     }
 
     void OnGUI()
@@ -674,8 +911,10 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         if (!showStats) return;
         GUI.color = Color.cyan;
         GUILayout.Label($"[PLY Map Viewer] FPS: {1.0f / Time.smoothDeltaTime:0}");
+        GUILayout.Label($"Mode: {(ShouldShowGlobalMap() ? "Global PLY" : "Local Preview")}, CrossReady={crossRobotAlignmentReady} robots={latestAlignedRobotCount} used={latestUsedConstraintCount}");
         GUILayout.Label($"Displayed Version: {displayedVersion}");
-        GUILayout.Label($"Displayed Points: {bufferCounts[activeBufferIdx]:N0} / {maxGlobalPoints:N0}");
+        GUILayout.Label($"Global Points: {bufferCounts[activeBufferIdx]:N0} / {maxGlobalPoints:N0}");
+        GUILayout.Label($"Local Preview Points: {localPreviewPointCount:N0} / {maxLocalPreviewPoints:N0} messages={localPreviewMessages} dropped={localPreviewDroppedMessages}");
         GUILayout.Label($"Download: {lastDownloadSec:F3}s  Parse: {lastParseSec:F3}s  Loading: {isLoading}");
         GUILayout.Label($"Updates: {downloadedUpdates} shown, {droppedUpdates} skipped, {failedUpdates} failed");
         if (!string.IsNullOrEmpty(displayedUrl)) GUILayout.Label(displayedUrl);
@@ -683,9 +922,14 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
 
     void OnDestroy()
     {
-        if (rosConnector != null && rosConnector.RosSocket != null && subId != null)
+        if (rosConnector != null && rosConnector.RosSocket != null)
         {
-            rosConnector.RosSocket.Unsubscribe(subId);
+            if (subId != null) rosConnector.RosSocket.Unsubscribe(subId);
+            if (alignmentSubId != null) rosConnector.RosSocket.Unsubscribe(alignmentSubId);
+            foreach (string localSubId in localPreviewSubIds)
+            {
+                if (localSubId != null) rosConnector.RosSocket.Unsubscribe(localSubId);
+            }
         }
 
         for (int i = 0; i < 2; i++)
@@ -693,6 +937,8 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
             posBuffers[i]?.Release();
             colBuffers[i]?.Release();
         }
+        localPreviewPosBuffer?.Release();
+        localPreviewColBuffer?.Release();
         dummyIdxBuffer?.Release();
         dummyPoseBuffer?.Release();
     }
