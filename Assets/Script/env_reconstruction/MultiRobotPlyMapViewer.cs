@@ -22,6 +22,10 @@ using StringMsg = RosSharp.RosBridgeClient.MessageTypes.Std.String;
 [RequireComponent(typeof(RosConnector))]
 public class MultiRobotPlyMapViewer : MonoBehaviour
 {
+    public event Action<int, int> MapDisplayed;
+    public int DisplayedVersion => displayedVersion;
+    public int DisplayedRobotCount => displayedRobotCount;
+
     [Header("ROS Notification")]
     public string plyUpdateTopic = "/multi_robot/optimized_map_ply_updates";
     public string robotAlignmentsTopic = "/multi_robot/robot_alignments";
@@ -49,7 +53,6 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     public float absoluteDownloadTimeoutSec = 30f;
     public float downloadStallTimeoutSec = 10f;
     public float downloadProgressLogIntervalSec = 1f;
-    public bool skipOlderPendingUpdates = true;
     public bool loadManifestOnStart = true;
     public string manifestUrl = "http://192.168.10.10:8012/map_latest.json";
     public bool pollManifest = true;
@@ -65,10 +68,10 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     public Transform localPreviewWorldAdjust;
 
     [Header("Rendering")]
-    public Material pointMaterial;
+    [HideInInspector] public Material pointMaterial;
     public float pointPixelSize = 3f;
     public float drawBoundsSize = 10000f;
-    [ColorUsage(false, true)] public Color colorTint = Color.white;
+    [HideInInspector, ColorUsage(false, true)] public Color colorTint = Color.white;
     public List<Camera> extraRenderCameras = new List<Camera>();
 
     [Header("Editor View")]
@@ -86,6 +89,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         public string filename;
         public int pointCount;
         public long fileSizeBytes;
+        public int robotCount;
     }
 
     private struct ParsedPly
@@ -132,6 +136,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
     private PlyUpdate? pendingLatest = null;
     private int latestRequestedVersion = -1;
     private int displayedVersion = -1;
+    private int displayedRobotCount = 0;
     private string displayedUrl = "";
     private float lastDownloadSec = 0f;
     private float lastParseSec = 0f;
@@ -630,9 +635,12 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         bufferCounts[backBufferIdx] = 0;
 
         displayedVersion = parsed.version;
+        displayedRobotCount = update.robotCount;
         displayedUrl = parsed.url;
         downloadedUpdates++;
         isLoading = false;
+
+        MapDisplayed?.Invoke(displayedVersion, displayedRobotCount);
 
         if (verboseLogs)
         {
@@ -759,6 +767,7 @@ public class MultiRobotPlyMapViewer : MonoBehaviour
         update.filename = ExtractString(json, "filename");
         update.pointCount = ExtractInt(json, "point_count", 0);
         update.fileSizeBytes = ExtractLong(json, "file_size_bytes", 0);
+        update.robotCount = ExtractInt(json, "robot_count", 0);
         return true;
     }
 

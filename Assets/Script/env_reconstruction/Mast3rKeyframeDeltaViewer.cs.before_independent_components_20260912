@@ -1,0 +1,707 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.Rendering;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+using RosMessageTypes.Sensor;
+using RosMessageTypes.Std;
+using RosMessageTypes.Nav;
+using Unity.Robotics.ROSTCPConnector;
+
+using Debug = UnityEngine.Debug;
+using Matrix4x4 = UnityEngine.Matrix4x4;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
+
+/// <summary>
+/// Keeps one immutable local point cloud per MASt3R keyframe. ROS sends point
+/// payloads only for new/recomputed keyframes; PGO updates only the Sim(3) pose.
+/// Each keyframe owns two GPU buffer sets so a replacement is uploaded offscreen
+/// and atomically swapped for rendering.
+/// </summary>
+public sealed class Mast3rKeyframeDeltaViewer : MonoBehaviour
+{
+    [Serializable]
+    private sealed class DeltaMetadata
+    {
+        public string delta_schema;
+        public string delta_action;
+        public string snapshot_id;
+        public int snapshot_count;
+        public string robot_id;
+        public int kf_id;
+        public string keyframe_uid;
+        public float[] sim3_data;
+        public int graph_revision;
+        public int cloud_revision;
+        public int pointmap_updates;
+        public bool metric_pose_valid;
+        public string translation_unit;
+    }
+
+    private sealed class DecodedCloud
+    {
+        public string uid;
+        public string frameId;
+        public int revision;
+        public Vector3[] positions;
+        public uint[] colors;
+        public int sourceCount;
+        public int validCount;
+        public double decodeSeconds;
+    }
+
+    private sealed class KeyframeGpu : IDisposable
+    {
+        public readonly string uid;
+        public int graphRevision = -1;
+        public int cloudRevision = -1;
+        public Matrix4x4 pose = Matrix4x4.identity;
+        public bool hasPose;
+        public int active = -1;
+        public int pointCount;
+        public Vector3[] localPositions;
+        public uint[] localColors;
+        public readonly ComputeBuffer[] positions = new ComputeBuffer[2];
+        public readonly ComputeBuffer[] colors = new ComputeBuffer[2];
+        public readonly int[] capacities = new int[2];
+
+        public KeyframeGpu(string keyframeUid)
+        {
+            uid = keyframeUid;
+        }
+
+        public void UploadAndSwap(Vector3[] newPositions, uint[] newColors, int count)
+        {
+            int target = active < 0 ? 0 : 1 - active;
+            EnsureCapacity(target, count);
+            if (count > 0)
+            {
+                positions[target].SetData(newPositions, 0, 0, count);
+                colors[target].SetData(newColors, 0, 0, count);
+            }
+            pointCount = count;
+            localPositions = newPositions;
+            localColors = newColors;
+            active = target;
+        }
+
+        private void EnsureCapacity(int index, int required)
+        {
+            if (required <= capacities[index] && positions[index] != null && colors[index] != null) return;
+            Release(index);
+            int capacity = Mathf.NextPowerOfTwo(Mathf.Max(1024, required));
+            positions[index] = new ComputeBuffer(capacity, sizeof(float) * 3);
+            colors[index] = new ComputeBuffer(capacity, sizeof(uint));
+            capacities[index] = capacity;
+        }
+
+        private void Release(int index)
+        {
+            if (positions[index] != null) positions[index].Release();
+            if (colors[index] != null) colors[index].Release();
+            positions[index] = null;
+            colors[index] = null;
+            capacities[index] = 0;
+        }
+
+        public void Dispose()
+        {
+            Release(0);
+            Release(1);
+            localPositions = null;
+            localColors = null;
+        }
+    }
+
+    [Header("ROS delta topics")]
+    public string metadataTopic = "/koch/mast3r/delta/keyframe_metadata";
+    public string localCloudTopic = "/koch/mast3r/delta/keyframe_cloud_local";
+    public string cameraTrajectoryTopic = "/koch/mast3r/camera_trajectory";
+
+    [Header("Rendering")]
+    public Material pointMaterial;
+    public float pointPixelSize = 3f;
+    public float drawBoundsSize = 10000f;
+    [ColorUsage(false, true)] public Color colorTint = Color.white;
+    public bool showInSceneView = true;
+
+    [Header("Runtime mini-map")]
+    public bool buildRuntimeMiniMap = true;
+    public RuntimePointCloudCollider runtimeCollider;
+    [Min(0.1f)] public float miniMapRebuildIntervalSeconds = 0.75f;
+
+    [Header("World adjustment")]
+    public bool useWorldAdjust = true;
+    public Transform worldAdjust;
+    public bool lockWorldAdjustDuringPlay = true;
+
+    [Header("Safety and diagnostics")]
+    [Tooltip("Zero accepts every finite point. A positive value rejects larger keyframes.")]
+    public int hardPointsPerKeyframeLimit = 0;
+    public bool removeMissingKeyframesAtSnapshotEnd = true;
+    public bool verboseLogs = true;
+    public bool showStats = true;
+    public string comparisonLabel = "DELTA";
+    public float statsLeft = 10f;
+    public float statsTop = 10f;
+    public float statsWidth = 430f;
+
+    private ROSConnection ros;
+    private readonly ConcurrentQueue<StringMsg> metadataMessages = new ConcurrentQueue<StringMsg>();
+    private readonly ConcurrentQueue<PointCloud2Msg> cloudMessages = new ConcurrentQueue<PointCloud2Msg>();
+    private readonly ConcurrentQueue<PathMsg> trajectoryMessages = new ConcurrentQueue<PathMsg>();
+    private readonly Dictionary<string, KeyframeGpu> keyframes = new Dictionary<string, KeyframeGpu>();
+    private readonly Dictionary<int, int> lastCameraDrawFrame = new Dictionary<int, int>();
+    private readonly HashSet<string> snapshotSeen = new HashSet<string>();
+    private readonly Dictionary<string, DeltaMetadata> pendingMetadata = new Dictionary<string, DeltaMetadata>();
+    private MaterialPropertyBlock drawProperties;
+
+    private Task<DecodedCloud> decodeTask;
+    private string activeSnapshotId = "";
+    private bool snapshotActive;
+    private int receivedClouds;
+    private int appliedClouds;
+    private int rejectedClouds;
+    private int poseUpdates;
+    private long receivedBytes;
+    private long lastTransportLatencyMicroseconds = -1;
+    private long lastSourceToSendMicroseconds = -1;
+    private long lastSchedulerQueueMicroseconds = -1;
+    private PathMsg pendingTrajectory;
+    private bool visibleUpdateAwaitingTrajectory;
+    private float startedAt;
+    private float firstVisibleSeconds = -1f;
+    private float lastVisibleSeconds = -1f;
+    private bool miniMapDirty;
+    private float lastMiniMapRequestTime = -1000f;
+    private int miniMapRevision;
+    private Matrix4x4 lockedWorldAdjustMatrix = Matrix4x4.identity;
+    private bool hasLockedWorldAdjustMatrix;
+
+    private void Awake()
+    {
+        drawProperties = new MaterialPropertyBlock();
+        if (buildRuntimeMiniMap)
+        {
+            if (runtimeCollider == null) runtimeCollider = GetComponent<RuntimePointCloudCollider>();
+            if (runtimeCollider == null) runtimeCollider = gameObject.AddComponent<RuntimePointCloudCollider>();
+        }
+        if (pointMaterial == null)
+        {
+            Shader shader = Shader.Find("Hidden/Mast3rKeyframeDelta");
+            if (shader != null) pointMaterial = new Material(shader);
+        }
+    }
+
+    private void OnEnable()
+    {
+        Camera.onPreCull += OnCameraPreCull;
+        RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+#if UNITY_EDITOR
+        SceneView.duringSceneGui += OnSceneViewGui;
+#endif
+    }
+
+    private void OnDisable()
+    {
+        Camera.onPreCull -= OnCameraPreCull;
+        RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+        lastCameraDrawFrame.Clear();
+#if UNITY_EDITOR
+        SceneView.duringSceneGui -= OnSceneViewGui;
+#endif
+    }
+
+    private void Start()
+    {
+        startedAt = Time.realtimeSinceStartup;
+        ros = ROSConnection.GetOrCreateInstance();
+        ros.Subscribe<StringMsg>(metadataTopic, message => metadataMessages.Enqueue(message));
+        ros.Subscribe<PointCloud2Msg>(localCloudTopic, ReceiveCloud);
+        ros.Subscribe<PathMsg>(cameraTrajectoryTopic, message => trajectoryMessages.Enqueue(message));
+        Debug.Log($"[Mast3rDelta] Subscribed metadata={metadataTopic} cloud={localCloudTopic}");
+    }
+
+    private void ReceiveCloud(PointCloud2Msg message)
+    {
+        Interlocked.Increment(ref receivedClouds);
+        if (message != null && message.data != null)
+            Interlocked.Add(ref receivedBytes, message.data.LongLength);
+        cloudMessages.Enqueue(message);
+    }
+
+    private void Update()
+    {
+        PathMsg newestTrajectory = null;
+        while (trajectoryMessages.TryDequeue(out PathMsg trajectory)) newestTrajectory = trajectory;
+        if (newestTrajectory != null) pendingTrajectory = newestTrajectory;
+        if (visibleUpdateAwaitingTrajectory && pendingTrajectory != null)
+            ApplyPendingTrajectory();
+
+        while (metadataMessages.TryDequeue(out StringMsg message)) ApplyMetadata(message);
+
+        if (decodeTask != null && decodeTask.IsCompleted)
+        {
+            try
+            {
+                DecodedCloud decoded = decodeTask.Result;
+                if (decoded != null) ApplyDecodedCloud(decoded);
+            }
+            catch (Exception error)
+            {
+                rejectedClouds++;
+                Debug.LogError($"[Mast3rDelta] Cloud decode failed: {error.GetBaseException().Message}");
+            }
+            decodeTask = null;
+        }
+
+        if (decodeTask == null && cloudMessages.TryDequeue(out PointCloud2Msg cloud))
+        {
+            int limit = hardPointsPerKeyframeLimit;
+            decodeTask = Task.Run(() => DecodeCloud(cloud, limit));
+        }
+
+        TryRequestMiniMapRebuild();
+
+        if (showStats && Time.frameCount % 300 == 0)
+        {
+            long total = 0;
+            foreach (KeyframeGpu keyframe in keyframes.Values) total += keyframe.pointCount;
+            Debug.Log(
+                $"[Mast3rDelta] keyframes={keyframes.Count} points={total:N0} " +
+                $"rx={receivedClouds} applied={appliedClouds} rejected={rejectedClouds} " +
+                $"poseUpdates={poseUpdates} queued={cloudMessages.Count}");
+        }
+    }
+
+    private void ApplyCameraTrajectory(PathMsg message)
+    {
+        if (runtimeCollider == null || message == null || message.poses == null) return;
+        Vector3[] points = new Vector3[message.poses.Length];
+        int written = 0;
+        for (int index = 0; index < message.poses.Length; index++)
+        {
+            if (message.poses[index] == null || message.poses[index].pose == null) continue;
+            float x = (float)message.poses[index].pose.position.x;
+            float y = (float)message.poses[index].pose.position.y;
+            float z = (float)message.poses[index].pose.position.z;
+            if (!IsFinite(x) || !IsFinite(y) || !IsFinite(z)) continue;
+            points[written++] = new Vector3(x, y, z);
+        }
+        if (written != points.Length) Array.Resize(ref points, written);
+        runtimeCollider.SetMapMatrix(GetWorldAdjustMatrix());
+        runtimeCollider.SetCameraTrajectory(points);
+    }
+
+    private void ApplyMetadata(StringMsg message)
+    {
+        if (message == null || string.IsNullOrEmpty(message.data)) return;
+        DeltaMetadata metadata;
+        try
+        {
+            metadata = JsonUtility.FromJson<DeltaMetadata>(message.data);
+        }
+        catch (Exception error)
+        {
+            Debug.LogWarning($"[Mast3rDelta] Invalid metadata JSON: {error.Message}");
+            return;
+        }
+        if (metadata == null) return;
+
+        if (metadata.delta_action == "SNAPSHOT_BEGIN")
+        {
+            activeSnapshotId = metadata.snapshot_id ?? "";
+            snapshotSeen.Clear();
+            snapshotActive = true;
+            if (verboseLogs)
+                Debug.Log($"[Mast3rDelta] Snapshot begin id={activeSnapshotId} count={metadata.snapshot_count}");
+            return;
+        }
+        if (metadata.delta_action == "SNAPSHOT_END")
+        {
+            if (snapshotActive && (string.IsNullOrEmpty(activeSnapshotId) || activeSnapshotId == metadata.snapshot_id))
+            {
+                if (removeMissingKeyframesAtSnapshotEnd) RemoveKeyframesMissingFromSnapshot();
+                snapshotActive = false;
+                if (verboseLogs) Debug.Log($"[Mast3rDelta] Snapshot end id={metadata.snapshot_id}");
+            }
+            return;
+        }
+
+        string uid = ResolveUid(metadata);
+        if (string.IsNullOrEmpty(uid)) return;
+        if (snapshotActive) snapshotSeen.Add(uid);
+        pendingMetadata[uid] = metadata;
+
+        KeyframeGpu keyframe = GetOrCreate(uid);
+        if (metadata.graph_revision < keyframe.graphRevision) return;
+        if (metadata.sim3_data == null || metadata.sim3_data.Length < 8) return;
+
+        float tx = metadata.sim3_data[0];
+        float ty = metadata.sim3_data[1];
+        float tz = metadata.sim3_data[2];
+        Quaternion rotation = new Quaternion(
+            metadata.sim3_data[3], metadata.sim3_data[4],
+            metadata.sim3_data[5], metadata.sim3_data[6]);
+        float magnitude = Mathf.Sqrt(
+            rotation.x * rotation.x + rotation.y * rotation.y +
+            rotation.z * rotation.z + rotation.w * rotation.w);
+        rotation = magnitude > 1e-6f
+            ? new Quaternion(rotation.x / magnitude, rotation.y / magnitude, rotation.z / magnitude, rotation.w / magnitude)
+            : Quaternion.identity;
+        float scale = metadata.sim3_data[7];
+        if (!IsFinite(scale) || scale <= 0f) scale = 1f;
+        if (!IsFinite(tx) || !IsFinite(ty) || !IsFinite(tz)) return;
+
+        keyframe.pose = Matrix4x4.TRS(new Vector3(tx, ty, tz), rotation, Vector3.one * scale);
+        keyframe.graphRevision = metadata.graph_revision;
+        keyframe.hasPose = true;
+        poseUpdates++;
+        if (keyframe.localPositions != null) miniMapDirty = true;
+    }
+
+    private void ApplyDecodedCloud(DecodedCloud decoded)
+    {
+        KeyframeGpu keyframe = GetOrCreate(decoded.uid);
+        if (decoded.revision <= keyframe.cloudRevision && keyframe.active >= 0)
+        {
+            if (verboseLogs)
+                Debug.Log($"[Mast3rDelta] Ignored old cloud {decoded.uid} revision={decoded.revision}");
+            return;
+        }
+        keyframe.UploadAndSwap(decoded.positions, decoded.colors, decoded.validCount);
+        keyframe.cloudRevision = decoded.revision;
+        appliedClouds++;
+        UpdateVisibleTiming(decoded.frameId);
+        float visibleAt = Time.realtimeSinceStartup - startedAt;
+        if (firstVisibleSeconds < 0f) firstVisibleSeconds = visibleAt;
+        lastVisibleSeconds = visibleAt;
+        miniMapDirty = true;
+        MarkMapUpdateVisible();
+        if (snapshotActive) snapshotSeen.Add(decoded.uid);
+        if (verboseLogs)
+        {
+            Debug.Log(
+                $"[Mast3rDelta] Applied {decoded.uid} cloudRev={decoded.revision} " +
+                $"points={decoded.validCount:N0}/{decoded.sourceCount:N0} " +
+                $"decode={decoded.decodeSeconds:F3}s");
+        }
+    }
+
+    private static DecodedCloud DecodeCloud(PointCloud2Msg message, int hardLimit)
+    {
+        Stopwatch timer = Stopwatch.StartNew();
+        if (message == null || message.header == null) throw new InvalidOperationException("PointCloud2/header is null");
+        if (message.is_bigendian) throw new NotSupportedException("Big-endian PointCloud2 is not supported");
+        ParseCloudFrameId(message.header.frame_id, out string uid, out int revision);
+        if (string.IsNullOrEmpty(uid)) throw new InvalidOperationException($"Missing keyframe UID: {message.header.frame_id}");
+
+        long sourceLong = (long)message.width * message.height;
+        if (sourceLong <= 0 || sourceLong > int.MaxValue) throw new InvalidOperationException("Invalid point count");
+        int sourceCount = (int)sourceLong;
+        if (hardLimit > 0 && sourceCount > hardLimit)
+            throw new InvalidOperationException($"Keyframe has {sourceCount:N0} points, limit is {hardLimit:N0}");
+        int step = checked((int)message.point_step);
+        if (step <= 0 || message.data == null || (long)step * sourceCount > message.data.Length)
+            throw new InvalidOperationException("PointCloud2 payload is truncated");
+
+        FindOffsets(message, out int xOffset, out int yOffset, out int zOffset, out int rgbOffset);
+        Vector3[] positions = new Vector3[sourceCount];
+        uint[] colors = new uint[sourceCount];
+        int valid = 0;
+        for (int index = 0; index < sourceCount; index++)
+        {
+            int offset = index * step;
+            float x = BitConverter.ToSingle(message.data, offset + xOffset);
+            float y = BitConverter.ToSingle(message.data, offset + yOffset);
+            float z = BitConverter.ToSingle(message.data, offset + zOffset);
+            if (!IsFinite(x) || !IsFinite(y) || !IsFinite(z)) continue;
+            positions[valid] = new Vector3(x, y, z);
+            colors[valid] = rgbOffset >= 0
+                ? BitConverter.ToUInt32(message.data, offset + rgbOffset) & 0x00FFFFFFu
+                : 0x00FFFFFFu;
+            valid++;
+        }
+        if (valid != sourceCount)
+        {
+            Array.Resize(ref positions, valid);
+            Array.Resize(ref colors, valid);
+        }
+        timer.Stop();
+        return new DecodedCloud
+        {
+            uid = uid,
+            frameId = message.header.frame_id,
+            revision = revision,
+            positions = positions,
+            colors = colors,
+            sourceCount = sourceCount,
+            validCount = valid,
+            decodeSeconds = timer.Elapsed.TotalSeconds,
+        };
+    }
+
+    private static void FindOffsets(PointCloud2Msg message, out int x, out int y, out int z, out int rgb)
+    {
+        x = y = z = rgb = -1;
+        if (message.fields != null)
+        {
+            foreach (PointFieldMsg field in message.fields)
+            {
+                if (field == null) continue;
+                if (field.name == "x") x = (int)field.offset;
+                else if (field.name == "y") y = (int)field.offset;
+                else if (field.name == "z") z = (int)field.offset;
+                else if (field.name == "rgb" || field.name == "rgba") rgb = (int)field.offset;
+            }
+        }
+        if (x < 0 || y < 0 || z < 0) throw new InvalidOperationException("PointCloud2 has no xyz fields");
+    }
+
+    private static void ParseCloudFrameId(string frameId, out string uid, out int revision)
+    {
+        uid = "";
+        revision = 1;
+        if (string.IsNullOrEmpty(frameId)) return;
+        string[] parts = frameId.Split('|');
+        uid = parts[0];
+        foreach (string part in parts)
+        {
+            const string prefix = "cloud_revision:";
+            if (part.StartsWith(prefix, StringComparison.Ordinal) &&
+                int.TryParse(part.Substring(prefix.Length), out int parsed))
+                revision = parsed;
+        }
+    }
+
+    private static string ResolveUid(DeltaMetadata metadata)
+    {
+        if (!string.IsNullOrEmpty(metadata.keyframe_uid)) return metadata.keyframe_uid;
+        if (string.IsNullOrEmpty(metadata.robot_id)) return "";
+        return $"{metadata.robot_id}_kf_{metadata.kf_id:D6}";
+    }
+
+    private KeyframeGpu GetOrCreate(string uid)
+    {
+        if (!keyframes.TryGetValue(uid, out KeyframeGpu keyframe))
+        {
+            keyframe = new KeyframeGpu(uid);
+            keyframes.Add(uid, keyframe);
+        }
+        return keyframe;
+    }
+
+    private void TryRequestMiniMapRebuild()
+    {
+        if (!buildRuntimeMiniMap || runtimeCollider == null || !miniMapDirty || snapshotActive) return;
+        float now = Time.realtimeSinceStartup;
+        if (now - lastMiniMapRequestTime < Mathf.Max(0.1f, miniMapRebuildIntervalSeconds)) return;
+
+        List<Vector3[]> chunks = new List<Vector3[]>();
+        List<uint[]> colors = new List<uint[]>();
+        List<Matrix4x4> transforms = new List<Matrix4x4>();
+        foreach (KeyframeGpu keyframe in keyframes.Values)
+        {
+            if (!keyframe.hasPose || keyframe.localPositions == null || keyframe.localPositions.Length == 0) continue;
+            chunks.Add(keyframe.localPositions);
+            colors.Add(keyframe.localColors);
+            transforms.Add(keyframe.pose);
+        }
+        if (chunks.Count == 0) return;
+
+        runtimeCollider.SetMapMatrix(GetWorldAdjustMatrix());
+        runtimeCollider.RequestRebuildTransformed(
+            ++miniMapRevision, chunks.ToArray(), colors.ToArray(), transforms.ToArray());
+        miniMapDirty = false;
+        lastMiniMapRequestTime = now;
+    }
+
+    private void RemoveKeyframesMissingFromSnapshot()
+    {
+        List<string> stale = new List<string>();
+        foreach (string uid in keyframes.Keys)
+            if (!snapshotSeen.Contains(uid)) stale.Add(uid);
+        foreach (string uid in stale)
+        {
+            keyframes[uid].Dispose();
+            keyframes.Remove(uid);
+            pendingMetadata.Remove(uid);
+        }
+        if (verboseLogs && stale.Count > 0)
+            Debug.Log($"[Mast3rDelta] Removed {stale.Count} stale keyframes after snapshot");
+        if (stale.Count > 0) miniMapDirty = true;
+    }
+
+    private void OnCameraPreCull(Camera camera) => DrawForCameraOnce(camera);
+    private void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera) => DrawForCameraOnce(camera);
+
+    private void DrawForCameraOnce(Camera camera)
+    {
+        if (!Application.isPlaying || camera == null || pointMaterial == null) return;
+        if (camera.cameraType == CameraType.Preview) return;
+#if UNITY_EDITOR
+        if (camera.cameraType == CameraType.SceneView && !showInSceneView) return;
+        if (camera.cameraType != CameraType.SceneView && !camera.enabled) return;
+#else
+        if (!camera.enabled) return;
+#endif
+        int cameraId = camera.GetInstanceID();
+        if (lastCameraDrawFrame.TryGetValue(cameraId, out int frame) && frame == Time.frameCount) return;
+        lastCameraDrawFrame[cameraId] = Time.frameCount;
+
+        Matrix4x4 world = GetWorldAdjustMatrix();
+        Vector3 center = world.MultiplyPoint3x4(Vector3.zero);
+        float scale = Mathf.Max(world.GetColumn(0).magnitude,
+            Mathf.Max(world.GetColumn(1).magnitude, world.GetColumn(2).magnitude));
+        Bounds bounds = new Bounds(center, Vector3.one * Mathf.Max(1f, drawBoundsSize * scale));
+
+        foreach (KeyframeGpu keyframe in keyframes.Values)
+        {
+            if (keyframe.active < 0 || keyframe.pointCount <= 0 || !keyframe.hasPose) continue;
+            drawProperties.Clear();
+            drawProperties.SetFloat("_PointSize", pointPixelSize);
+            drawProperties.SetColor("_Tint", colorTint);
+            drawProperties.SetBuffer("_Positions", keyframe.positions[keyframe.active]);
+            drawProperties.SetBuffer("_Colors", keyframe.colors[keyframe.active]);
+            drawProperties.SetMatrix("_KeyframeTransform", world * keyframe.pose);
+            Graphics.DrawProcedural(pointMaterial, bounds, MeshTopology.Points,
+                keyframe.pointCount, 1, camera, drawProperties,
+                ShadowCastingMode.Off, false, gameObject.layer);
+        }
+    }
+
+    private Matrix4x4 GetWorldAdjustMatrix()
+    {
+        if (!useWorldAdjust || worldAdjust == null) return Matrix4x4.identity;
+        if (!lockWorldAdjustDuringPlay) return worldAdjust.localToWorldMatrix;
+        if (!hasLockedWorldAdjustMatrix)
+        {
+            lockedWorldAdjustMatrix = worldAdjust.localToWorldMatrix;
+            hasLockedWorldAdjustMatrix = true;
+        }
+        return lockedWorldAdjustMatrix;
+    }
+
+#if UNITY_EDITOR
+    private void OnSceneViewGui(SceneView sceneView)
+    {
+        if (showInSceneView && Application.isPlaying) sceneView.Repaint();
+    }
+#endif
+
+    [ContextMenu("Clear Delta Map")]
+    public void ClearDeltaMap()
+    {
+        foreach (KeyframeGpu keyframe in keyframes.Values) keyframe.Dispose();
+        keyframes.Clear();
+        pendingMetadata.Clear();
+        snapshotSeen.Clear();
+        miniMapDirty = false;
+    }
+
+    [ContextMenu("Recapture World Adjust")]
+    public void RecaptureWorldAdjust()
+    {
+        lockedWorldAdjustMatrix = useWorldAdjust && worldAdjust != null
+            ? worldAdjust.localToWorldMatrix : Matrix4x4.identity;
+        hasLockedWorldAdjustMatrix = true;
+    }
+
+    private void OnDestroy()
+    {
+        if (ros != null)
+        {
+            if (!string.IsNullOrWhiteSpace(metadataTopic)) ros.Unsubscribe(metadataTopic);
+            if (!string.IsNullOrWhiteSpace(localCloudTopic)) ros.Unsubscribe(localCloudTopic);
+            if (!string.IsNullOrWhiteSpace(cameraTrajectoryTopic)) ros.Unsubscribe(cameraTrajectoryTopic);
+        }
+        ClearDeltaMap();
+        if (pointMaterial != null && pointMaterial.name.EndsWith("(Instance)")) Destroy(pointMaterial);
+    }
+
+    private void OnGUI()
+    {
+        if (!showStats) return;
+        Rect area = new Rect(statsLeft, statsTop, Mathf.Max(240f, statsWidth), 185f);
+        GUILayout.BeginArea(area, GUI.skin.box);
+        GUI.color = Color.cyan;
+        long points = 0;
+        foreach (KeyframeGpu keyframe in keyframes.Values) points += keyframe.pointCount;
+        double latencyMs = Interlocked.Read(ref lastTransportLatencyMicroseconds) / 1000.0;
+        double sourceToSendMs = Interlocked.Read(ref lastSourceToSendMicroseconds) / 1000.0;
+        double schedulerQueueMs = Interlocked.Read(ref lastSchedulerQueueMicroseconds) / 1000.0;
+        GUILayout.Label($"[{comparisonLabel}] keyframe delta");
+        GUILayout.Label($"First visible: {(firstVisibleSeconds < 0f ? "waiting" : firstVisibleSeconds.ToString("F2") + " s")}  Last: {(lastVisibleSeconds < 0f ? "-" : lastVisibleSeconds.ToString("F2") + " s")}");
+        GUILayout.Label($"Keyframes: {keyframes.Count}  Points: {points:N0}");
+        GUILayout.Label($"RX: {Interlocked.Read(ref receivedBytes) / 1048576.0:F1} MiB");
+        GUILayout.Label($"ROS source→send: {(sourceToSendMs < 0 ? "-" : sourceToSendMs.ToString("F1") + " ms")}  queue: {(schedulerQueueMs < 0 ? "-" : schedulerQueueMs.ToString("F1") + " ms")}");
+        GUILayout.Label($"send→Unity callback*: {(latencyMs < 0 ? "-" : latencyMs.ToString("F1") + " ms")}");
+        GUILayout.Label($"Clouds: {appliedClouds}/{receivedClouds}  Pose updates: {poseUpdates}  Queue: {cloudMessages.Count}");
+        GUILayout.EndArea();
+    }
+
+    private static bool TryReadTransportSentNs(string frameId, out long sentNs)
+    {
+        sentNs = 0L;
+        if (string.IsNullOrEmpty(frameId)) return false;
+        const string prefix = "transport_sent_ns:";
+        foreach (string part in frameId.Split('|'))
+        {
+            if (part.StartsWith(prefix, StringComparison.Ordinal) &&
+                long.TryParse(part.Substring(prefix.Length), out sentNs)) return true;
+        }
+        return false;
+    }
+
+    private void MarkMapUpdateVisible()
+    {
+        visibleUpdateAwaitingTrajectory = true;
+        if (pendingTrajectory != null) ApplyPendingTrajectory();
+    }
+
+    private void ApplyPendingTrajectory()
+    {
+        ApplyCameraTrajectory(pendingTrajectory);
+        pendingTrajectory = null;
+        visibleUpdateAwaitingTrajectory = false;
+    }
+
+    private void UpdateVisibleTiming(string frameId)
+    {
+        if (TryReadTaggedNanoseconds(frameId, "source_to_sent_ns:", out long sourceToSend))
+            Interlocked.Exchange(ref lastSourceToSendMicroseconds, sourceToSend / 1000L);
+        if (TryReadTaggedNanoseconds(frameId, "scheduler_queue_ns:", out long queue))
+            Interlocked.Exchange(ref lastSchedulerQueueMicroseconds, queue / 1000L);
+        if (TryReadTransportSentNs(frameId, out long sentNs))
+        {
+            long latencyUs = Math.Max(0L, (UnixTimeNanoseconds() - sentNs) / 1000L);
+            Interlocked.Exchange(ref lastTransportLatencyMicroseconds, latencyUs);
+        }
+    }
+
+    private static bool TryReadTaggedNanoseconds(string frameId, string prefix, out long value)
+    {
+        value = 0L;
+        if (string.IsNullOrEmpty(frameId)) return false;
+        foreach (string part in frameId.Split('|'))
+            if (part.StartsWith(prefix, StringComparison.Ordinal) &&
+                long.TryParse(part.Substring(prefix.Length), out value)) return true;
+        return false;
+    }
+
+    private static long UnixTimeNanoseconds()
+    {
+        const long unixEpochTicks = 621355968000000000L;
+        return (DateTime.UtcNow.Ticks - unixEpochTicks) * 100L;
+    }
+
+    private static bool IsFinite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
+}

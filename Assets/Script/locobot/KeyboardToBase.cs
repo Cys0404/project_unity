@@ -1,53 +1,63 @@
 using UnityEngine;
+using Unity.Robotics.ROSTCPConnector;
+using RosMessageTypes.Geometry;
 
-namespace RosSharp.RosBridgeClient
+public class KeyboardToBase : MonoBehaviour
 {
-    public class KeyboardToBase : UnityPublisher<MessageTypes.Geometry.Twist>
+    [Header("ROS-TCP 設定")]
+    public string topicName = "/locobot/commands/velocity";
+
+    [Header("Movement Settings")]
+    public float linearSpeed = 0.25f;
+    public float angularSpeed = 0.6f;
+
+    [Header("Debug")]
+    public bool Debug_message = false;
+
+    private ROSConnection ros;
+    private TwistMsg message;
+    private float handLinear = 0f;
+    private float handAngular = 0f;
+
+    void Start()
     {
-        [Header("Movement Settings")]
-        [Tooltip("�e/�᪽�u�t�ס]m/s�^")]
-        public float linearSpeed = 0.25f;
+        // 1. 取得 ROS-TCP 連線單例
+        ros = ROSConnection.GetOrCreateInstance();
+        
+        // 2. 向 ROS 註冊此 Topic 的 Publisher
+        ros.RegisterPublisher<TwistMsg>(topicName);
 
-        [Tooltip("���ਤ�t�ס]rad/s�^")]
-        public float angularSpeed = 0.60f;
+        // 3. 初始化 Twist 訊息
+        message = new TwistMsg();
+    }
 
-        [Header("Debug")]
-        public bool debug_message = false;
-
-        private MessageTypes.Geometry.Twist message;
-
-        protected override void Start()
+    void Update()
+    {
+        // 優先讀取手勢速度 (由 XRHandThumbsUpDrive 傳入)
+        if (handLinear != 0f || handAngular != 0f)
         {
-            base.Start();
-
-            message = new MessageTypes.Geometry.Twist
-            {
-                linear = new MessageTypes.Geometry.Vector3(),
-                angular = new MessageTypes.Geometry.Vector3()
-            };
+            message.linear.x = handLinear;
+            message.angular.z = handAngular;
+            ros.Publish(topicName, message);
+            return;
         }
 
-        private void Update()
+        // 鍵盤備案操控 (WASD)
+        float lx = Input.GetAxis("Vertical") * linearSpeed;
+        float az = -Input.GetAxis("Horizontal") * angularSpeed;
+
+        if (lx != 0f || az != 0f)
         {
-            message.linear.x = 0f;
-            message.angular.z = 0f;
-
-            if (Input.GetKey(KeyCode.UpArrow))
-                message.linear.x = linearSpeed;
-            else if (Input.GetKey(KeyCode.DownArrow))
-                message.linear.x = -linearSpeed;
-
-            if (Input.GetKey(KeyCode.LeftArrow))
-                message.angular.z = angularSpeed;
-            else if (Input.GetKey(KeyCode.RightArrow))
-                message.angular.z = -angularSpeed;
-
-            if (debug_message)
-            {
-                Debug.Log($"[KeyboardToBase] topic={Topic} | linX={message.linear.x:F2} | angZ={message.angular.z:F2}");
-            }
-
-            Publish(message);
+            message.linear.x = lx;
+            message.angular.z = az;
+            ros.Publish(topicName, message);
         }
+    }
+
+    // 提供給 XRHandThumbsUpDrive 手勢腳本呼叫的介面
+    public void SetHandVelocity(float linear, float angular)
+    {
+        handLinear = linear;
+        handAngular = angular;
     }
 }
